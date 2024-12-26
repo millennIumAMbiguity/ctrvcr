@@ -1,5 +1,5 @@
 #version 130
-#define PortalParticles
+#include "settings.glsl"
 
 //Diffuse (color) texture.
 uniform sampler2D texture;

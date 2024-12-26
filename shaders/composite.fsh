@@ -5,8 +5,9 @@ uniform sampler2D colortex0;
 uniform sampler2D colortex1;
 uniform float frameTimeCounter;
 uniform int blockEntityId;
-in vec2 texcoord_vs;
-in vec3 mc_Entity;
+uniform float viewWidth;
+uniform float viewHeight;
+varying vec2 texcoord_vs;
 
 out vec4 fragColor;
 
@@ -33,8 +34,25 @@ void main() {
 	vec2 texcoord = vec2(0.5, 0.5) + dir * distortion * (1-(DistortionFactor/3));  // Modify the UV coordinates
 #endif
 
-	float uvy = texcoord.y;
-	float uvx = texcoord.x;
+// Resolutino scaling
+#if RenderPixelSize > 1
+	vec2 texcoordScaled = texcoord - vec2(mod(texcoord.x, RenderPixelSize/viewWidth), mod(texcoord.y, RenderPixelSize/viewHeight));
+
+	#if FXPixelSize == RenderPixelSize
+		texcoord = texcoordScaled;
+	#elif FXPixelSize > 1
+		texcoord = texcoord - vec2(mod(texcoord.x, FXPixelSize/viewWidth), mod(texcoord.y, FXPixelSize/viewHeight));
+	#endif
+#else
+	vec2 texcoordScaled = texcoord;
+
+	#if FXPixelSize > 1
+		texcoord = texcoord - vec2(mod(texcoord.x, FXPixelSize/viewWidth), mod(texcoord.y, FXPixelSize/viewHeight));
+	#endif
+#endif
+
+	float uvy = texcoordScaled.y;
+	float uvx = texcoordScaled.x;
 
 	float v = Random_float(texcoord + vec2(timeM60, timeM200));
 	float v2 = Random_float(texcoord + vec2(1.0 + timeM60, timeM200));
@@ -60,7 +78,7 @@ void main() {
 	// Bloom
 #if BloomSize >= 0 || defined(PortalStatic)
 	#if BloomSize >= 0
-		vec3 color = texture2D(colortex0, texcoord).rgb;
+		vec3 color = texture2D(colortex0, texcoordScaled).rgb;
 		vec3 bloom;
 	#endif
 
@@ -70,14 +88,14 @@ void main() {
 
 		for(int i= -3 ;i < 3; i++)
 		{
-			float v3 = (0.5 - Random_float(texcoord + vec2(1.0 + i*3 + timeM60, timeM200))) + i;
-			float v4 = (0.5 - Random_float(texcoord + vec2(2.0 + i*3 + timeM60, timeM200)));
-			float v5 = (0.5 - Random_float(texcoord + vec2(3.0 + i*3 + timeM60, timeM200)));
-			float v6 = (0.5 - Random_float(texcoord + vec2(4.0 + i*3 + timeM60, timeM200)));
+			float v3 = (0.5 - Random_float(texcoordScaled + vec2(1.0 + i*3 + timeM60, timeM200))) + i;
+			float v4 = (0.5 - Random_float(texcoordScaled + vec2(2.0 + i*3 + timeM60, timeM200)));
+			float v5 = (0.5 - Random_float(texcoordScaled + vec2(3.0 + i*3 + timeM60, timeM200)));
+			float v6 = (0.5 - Random_float(texcoordScaled + vec2(4.0 + i*3 + timeM60, timeM200)));
 
-			vec2 cordA = texcoord + vec2(-1 + v4, v3)*0.004;
-			vec2 cordB = texcoord + vec2( v5, v3)*0.004;
-			vec2 cordC = texcoord + vec2( 1 + v6, v3)*0.004;
+			vec2 cordA = texcoordScaled + vec2(-1 + v4, v3)*0.004;
+			vec2 cordB = texcoordScaled + vec2( v5, v3)*0.004;
+			vec2 cordC = texcoordScaled + vec2( 1 + v6, v3)*0.004;
 
 	#if BloomSize >= 0
 			sum += texture2D(colortex0, cordA).xyz * BloomSize;
@@ -174,7 +192,7 @@ void main() {
 #else
 	float _static = Static;
 #endif
-	float l = abs(vRow - uvy)*StaticTearChance;
+	float l = abs(vRow - texcoord.y)*StaticTearChance;
 	if (StaticTearChance < 400 && l < 0.004f*v) _static = 1-min(l,0.05f*v)*50/v;
 	if (v < _static)
 	{
