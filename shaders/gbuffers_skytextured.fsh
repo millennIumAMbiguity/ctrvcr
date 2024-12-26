@@ -1,4 +1,4 @@
-#version 450 compatibility
+#version 130
 
 //Diffuse (color) texture.
 uniform sampler2D texture;

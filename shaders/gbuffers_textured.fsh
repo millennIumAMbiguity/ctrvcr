@@ -1,4 +1,4 @@
-#version 450 compatibility
+#version 130
 #define PortalParticles
 
 //Diffuse (color) texture.
