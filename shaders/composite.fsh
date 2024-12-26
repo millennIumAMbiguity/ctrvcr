@@ -25,7 +25,7 @@ void main() {
 	float timeM60 = mod(time, 60.0);
 	float timeM200 = mod(time, 200.0);
 
-#if DistortionFactor <= 0
+#if DistortionFactor < 0
 	vec2 texcoord = texcoord_vs;
 #else
 	vec2 dir = texcoord_vs - vec2(0.5, 0.5);  // Direction from the center
