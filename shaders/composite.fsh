@@ -64,13 +64,24 @@ void main() {
 #if ScreenTearSpeed < 1
 	if (ScreenTearSpeed <= 0) {
 		float offset = ScreenTearDelay * 0.001;
-		if (uvy < ScreenTearSize + offset && uvy > offset) texcoord.y = uvy = fract(offset);
+
+		if (uvy < ScreenTearSize + offset && uvy > offset) {
+			texcoord.y = uvy = fract(offset);
+			#ifdef ScreenTearSolid
+			texcoordScaled.y = uvy;
+			#endif
+		}
 	} else 
 #endif
 	{
 		float y1 = mod(ScreenTearSpeed * time + ScreenTearSize, ScreenTearDelay + ScreenTearSize);
 		float y2 = uvy-y1;
-		if (y2 < 0.0f && y2 > -ScreenTearSize) texcoord.y = uvy = fract(y1);
+		if (y2 < 0.0f && y2 > -ScreenTearSize) {
+			texcoord.y = uvy = fract(y1);
+			#ifdef ScreenTearSolid
+			texcoordScaled.y = uvy;
+			#endif
+		}
 	}
 
 	vec3 sum = vec3(0);
