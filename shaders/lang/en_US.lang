@@ -1,0 +1,48 @@
+#shaders/lang/en_us.lang
+
+screen.PixelSize=Pixel Size
+screen.ScreenTear=Screen Tear
+
+option.PortalStatic=Portal Static
+option.PortalParticles=Portal Particles
+option.ScreenTearSolid=Screen Tear Solid
+option.DarkEdges=Dark Edges
+option.BlurSize=Blur Size
+option.ScreenTearSize=Screen Tear Size
+option.ScreenTearDelay=Screen Tear Delay
+option.ScreenTearSpeed=Screen Tear Speed
+option.StaticTearChance=Static Tear Chance
+option.BloomSize=Bloom Size
+option.DistortionFactor=Distortion Factor
+option.ScanlineIntensity=Scanline Intensity
+option.RenderPixelSize=Render Pixel Size
+option.FXPixelSize=FX Pixel Size
+option.ScanlinePixelSize=Scanline Pixel Size
+option.BNW=Black and White
+
+value.DarkEdges.-1=Off
+value.BlurSize.-1=Off
+value.Static.-1=Off
+value.ScreenTearSize.-1=Off
+value.ScreenTearDelay.-1=Off
+value.ScreenTearSpeed.-1=Off
+value.StaticTearChance.-1=Off
+value.BloomSize.-1=Off
+value.DistortionFactor.-1=Off
+value.ScanlineIntensity.-1=Off
+value.BNW.0=Off
+
+suffix.DarkEdges=%
+suffix.Static=%
+suffix.BNW=%
+
+suffix.RenderPixelSize= px
+suffix.FXPixelSize= px
+suffix.ScanlinePixelSize= px
+
+suffix.Red=x
+suffix.Green=x
+suffix.Blue=x
+
+option.DarkEdges.comment=Percent of screen width the effect is offset per side.
+option.PortalStatic.comment=Makes nether portals and portal particles render as static.

@@ -157,13 +157,11 @@ void main() {
 #endif
 
 	// blur and aberration
-#if BlurSize >= 0
-	float vScaled = v * _BlurSize;
 	float v2Scaled = v2 * _BlurSize;
-
-	float BlurSize2 = _BlurSize / 4;
-
+	float vScaled = v * _BlurSize;
 	float vHalf = vScaled / 2;
+#if BlurSize >= 0
+	float BlurSize2 = _BlurSize / 4;
 
 	vec3 left1 = texture2D(colortex0, vec2(uvx - vScaled, uvy + vScaled / 3.0)).rgb;
 	vec3 left2 = texture2D(colortex0, vec2(uvx - vHalf + (left1.r * BlurSize2), uvy + vScaled / 6.0 + (left1.g * BlurSize2))).rgb;
@@ -182,20 +180,25 @@ void main() {
 	sum = vec3(
 #if BlurSize >= 0
 		(left1[0] + left2[0] + center[0])/3,
-#else
-		center[0],
-#endif
-	#if BloomSize < 0
-		center[1] * Green,
-	#else
-		center[1] * ((1. - (BloomSize / 4.)) * Green),
-	#endif
-#if BlurSize >= 0
+		center[1] * (1. - (BloomSize / 4.)),
 		(right1[2] + right2[2] + center[2])/3);
 #else
-		center[2];
+		center[0],
+		center[1],
+		center[2]);
 #endif
 
+	sum[0] *= Red;
+	sum[1] *= Green;
+	sum[2] *= Blue;
+
+#if BNW == 100
+	float bnw = (sum[0] + sum[1] + sum[2]) / 3;
+	sum = vec3(bnw);
+#elif BNW > 0
+	float bnw = (sum[0] + sum[1] + sum[2]) / 3;
+	sum = mix(sum, vec3(bnw), BNW/100.0);
+#endif
 
 	// Static and tearing
 #ifdef PortalStatic
