@@ -17,13 +17,18 @@ float Random_float(vec2 Seed)
 	return fract(sin(dot(Seed,vec2(12.9898,78.233)))*43758.5453123);
 }
 
+// more consistent random function
+float hash(vec2 p, float time) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y + time);
+}
+
 float xmy(vec4 v) { return v.x-v.y; }
 
 void main() {
 
-	float time = frameTimeCounter;
-	float timeM60 = mod(time, 60.0);
-	float timeM200 = mod(time, 200.0);
+	float time = mod(frameTimeCounter, 8192);
 
 #if DistortionFactor < 0
 	vec2 texcoord = texcoord_vs;
@@ -54,8 +59,8 @@ void main() {
 	float uvy = texcoordScaled.y;
 	float uvx = texcoordScaled.x;
 
-	float v = Random_float(texcoord + vec2(timeM60, timeM200));
-	float v2 = Random_float(texcoord + vec2(1.0 + timeM60, timeM200));
+	float v = hash(texcoord, time);
+	float v2 = hash(texcoord, time + 456.789);
 
 
 	float vRow = Random_float(vec2(time, int(uvy)));
@@ -99,10 +104,11 @@ void main() {
 
 		for(int i= -3 ;i < 3; i++)
 		{
-			float v3 = (0.5 - Random_float(texcoordScaled + vec2(1.0 + i*3 + timeM60, timeM200))) + i;
-			float v4 = (0.5 - Random_float(texcoordScaled + vec2(2.0 + i*3 + timeM60, timeM200)));
-			float v5 = (0.5 - Random_float(texcoordScaled + vec2(3.0 + i*3 + timeM60, timeM200)));
-			float v6 = (0.5 - Random_float(texcoordScaled + vec2(4.0 + i*3 + timeM60, timeM200)));
+			float i3 = i * 3;
+			float v3 = (0.5 - Random_float(texcoordScaled + vec2(1.0 + i3, 0) + time)) + i;
+			float v4 = (0.5 - Random_float(texcoordScaled + vec2(2.0 + i3, 0) + (time + 100.2)));
+			float v5 = (0.5 - Random_float(texcoordScaled + vec2(3.0 + i3, 0) + (time + 200.5)));
+			float v6 = (0.5 - Random_float(texcoordScaled + vec2(4.0 + i3, 0) + (time + 300.8)));
 
 			vec2 cordA = texcoordScaled + vec2(-1 + v4, v3)*0.004;
 			vec2 cordB = texcoordScaled + vec2( v5, v3)*0.004;
