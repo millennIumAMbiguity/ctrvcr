@@ -42,8 +42,6 @@ jobs:
         with:
           tag_name: v${{ github.event.inputs.version }}
           release_name: Release ${{ github.event.inputs.version }}
-          prerelease: true
-          draft: true
       - name: Upload Release Artifact
         if: github.event.inputs.targets == 'all' || github.event.inputs.targets == 'GitHub'
         uses: actions/upload-release-asset@v1
@@ -62,7 +60,7 @@ jobs:
           version: v${{ github.event.inputs.version }}
           version-type: release
           files: ./CTR-VCR_v${{ github.event.inputs.version }}.zip
-          changelog: "### Release ${{ github.event.inputs.version }}"
+          changelog-file: CHANGELOG.md
           loaders: 
             optifine
             iris
@@ -78,7 +76,7 @@ jobs:
           version: v${{ github.event.inputs.version }}
           version-type: release
           files: ./CTR-VCR_v${{ github.event.inputs.version }}.zip
-          changelog: "### Release ${{ github.event.inputs.version }}"
+          changelog-file: CHANGELOG.md
           loaders: 
             optifine
             iris
