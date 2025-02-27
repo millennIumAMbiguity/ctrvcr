@@ -19,6 +19,7 @@ option.RenderPixelSize=Render Pixel Size
 option.FXPixelSize=FX Pixel Size
 option.ScanlinePixelSize=Scanline Pixel Size
 option.BNW=Black and White
+option.GrainIntesity=Grain Intesity
 
 value.DarkEdges.-1=Off
 value.BlurSize.-1=Off
@@ -31,6 +32,7 @@ value.BloomSize.-1=Off
 value.DistortionFactor.-1=Off
 value.ScanlineIntensity.-1=Off
 value.BNW.0=Off
+value.GrainIntesity.-1=Off
 
 suffix.DarkEdges=%
 suffix.Static=%
@@ -43,6 +45,7 @@ suffix.ScanlinePixelSize= px
 suffix.Red=x
 suffix.Green=x
 suffix.Blue=x
+suffix.GrainIntesity=x
 
 option.DarkEdges.comment=Percent of screen width the effect is offset per side.
 option.PortalStatic.comment=Makes nether portals and portal particles render as static.

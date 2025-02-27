@@ -29,6 +29,7 @@ float xmy(vec4 v) { return v.x-v.y; }
 void main() {
 
 	float time = mod(frameTimeCounter, 8192);
+	float time8 = mod(frameTimeCounter * 7.987, 8192);
 
 #if DistortionFactor < 0
 	vec2 texcoord = texcoord_vs;
@@ -59,8 +60,8 @@ void main() {
 	float uvy = texcoordScaled.y;
 	float uvx = texcoordScaled.x;
 
-	float v = hash(texcoord, time);
-	float v2 = hash(texcoord, time + 456.789);
+	float v = hash(texcoord, time8);
+	float v2 = hash(texcoord, time8 + 456.789);
 
 
 	float vRow = Random_float(vec2(time, int(uvy)));
@@ -197,6 +198,10 @@ void main() {
 	sum[0] *= Red;
 	sum[1] *= Green;
 	sum[2] *= Blue;
+
+#if GrainIntesity >= 0
+	sum += sum * (0.5f-v) * GrainIntesity;
+#endif
 
 #if BNW == 100
 	float bnw = (sum[0] + sum[1] + sum[2]) / 3;
