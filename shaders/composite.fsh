@@ -212,8 +212,12 @@ void main() {
 #else
 	float _static = Static;
 #endif
+
+#if StaticTearChance < 400
 	float l = abs(vRow - texcoord.y)*StaticTearChance;
 	if (StaticTearChance < 400 && l < 0.004f*v) _static = 1-min(l,0.05f*v)*50/v;
+#endif
+
 	if (v < _static)
 	{
 		float sv = (_static+.5)*v2;

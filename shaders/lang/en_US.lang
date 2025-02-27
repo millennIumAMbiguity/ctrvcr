@@ -26,7 +26,7 @@ value.Static.-1=Off
 value.ScreenTearSize.-1=Off
 value.ScreenTearDelay.-1=Off
 value.ScreenTearSpeed.-1=Off
-value.StaticTearChance.-1=Off
+value.StaticTearChance.1000=Off
 value.BloomSize.-1=Off
 value.DistortionFactor.-1=Off
 value.ScanlineIntensity.-1=Off
@@ -46,3 +46,4 @@ suffix.Blue=x
 
 option.DarkEdges.comment=Percent of screen width the effect is offset per side.
 option.PortalStatic.comment=Makes nether portals and portal particles render as static.
+option.StaticTearChance.comment=Chance that static tears / horizontal lines of static does not appear.
