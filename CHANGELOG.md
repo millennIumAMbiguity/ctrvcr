@@ -1,3 +1,10 @@
+## 1.1.6
+### Changes
+- Fixed slow noise.
+- Fixed off state for static tear
+### Additions
+- Added grain
+
 ## 1.1.5
 ### Changes
 - Improved noise functions.
