@@ -1,9 +1,15 @@
+## 1.1.7
+### Additions
+- Added AIWS texture distortion. (Disabled by default.)
+### Fixes
+- Fixed bug when BlurSize and BloomSize were off.
+
 ## 1.1.6
 ### Changes
 - Fixed slow noise.
-- Fixed off state for static tear
+- Fixed off state for static tear.
 ### Additions
-- Added grain
+- Added grain.
 
 ## 1.1.5
 ### Changes
