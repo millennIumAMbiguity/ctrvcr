@@ -1,5 +1,6 @@
 #version 130
 #include "settings.glsl"
+#include "hash.glsl"
 
 uniform sampler2D colortex0;
 uniform sampler2D colortex1;
@@ -11,18 +12,6 @@ varying vec2 texcoord_vs;
 
 out vec4 fragColor;
 
-
-float Random_float(vec2 Seed)
-{
-	return fract(sin(dot(Seed,vec2(12.9898,78.233)))*43758.5453123);
-}
-
-// more consistent random function
-float hash(vec2 p, float time) {
-    p = fract(p * vec2(123.34, 456.21));
-    p += dot(p, p + 45.32);
-    return fract(p.x * p.y + time);
-}
 
 float xmy(vec4 v) { return v.x-v.y; }
 

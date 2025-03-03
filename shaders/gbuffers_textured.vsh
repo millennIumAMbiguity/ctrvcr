@@ -1,4 +1,5 @@
 #version 130
+#include "settings.glsl"
 
 //Get Entity id.
 attribute float mc_Entity;
@@ -13,12 +14,19 @@ varying vec2 coord0;
 varying vec2 coord1;
 varying float mcEntity;
 
+#if AIWS_Source == 2
+varying vec3 mcEntityPos;
+#endif
+
 /* DRAWBUFFERS:01 */
 void main()
 {
 	mcEntity = mc_Entity;
     //Calculate world space position.
     vec3 pos = (gl_ModelViewMatrix * gl_Vertex).xyz;
+#if AIWS_Source == 2
+    mcEntityPos = pos;
+#endif
     pos = (gbufferModelViewInverse * vec4(pos,1)).xyz;
 
     //Output position and fog to fragment shader.

@@ -20,6 +20,10 @@ option.FXPixelSize=FX Pixel Size
 option.ScanlinePixelSize=Scanline Pixel Size
 option.BNW=Black and White
 option.GrainIntesity=Grain Intesity
+option.AIWS_Type=Mode
+option.AIWS_Source=Source
+option.AIWS_Speed=Speed
+option.AIWS_Intensity=Intensity
 
 value.DarkEdges.-1=Off
 value.BlurSize.-1=Off
@@ -33,6 +37,21 @@ value.DistortionFactor.-1=Off
 value.ScanlineIntensity.-1=Off
 value.BNW.0=Off
 value.GrainIntesity.-1=Off
+
+value.AIWS.0=Disabled
+value.AIWS.1=Enabled
+
+value.AIWS_Source.0=Time
+value.AIWS_Source.1=Position
+value.AIWS_Source.2=Camera Position
+value.AIWS_Source.3=Time + Position
+
+value.AIWS_Type.0=Breating
+value.AIWS_Type.1=Linear
+value.AIWS_Type.2=Waves
+value.AIWS_Type.3=Static
+value.AIWS_Type.4=Basic
+value.AIWS_Type.5=Hard
 
 suffix.DarkEdges=%
 suffix.Static=%
@@ -50,3 +69,4 @@ suffix.GrainIntesity=x
 option.DarkEdges.comment=Percent of screen width the effect is offset per side.
 option.PortalStatic.comment=Makes nether portals and portal particles render as static.
 option.StaticTearChance.comment=Chance that static tears / horizontal lines of static does not appear.
+option.AIWS.comment=Alice in Wonderland Syndrome
