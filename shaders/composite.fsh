@@ -166,7 +166,7 @@ void main() {
 	float right2Offset = vHalf - (right1.r * BlurSize2);
 	vec3 right2 = texture2D(colortex0, vec2(uvx + right2Offset, uvy + right2Offset)).rgb;
 # else
-	vec3 center = texture2D(colortex0, vec2(uvx - vHalf / 2.0 + v2Scaled / 4.0, uvy - vHalf / 4.0 + v2Scaled / 8.0)).rgb;
+	vec3 center = texture2D(colortex0, vec2(uvx, uvy)).rgb;
 #endif
 
 #if BloomSize >= 0
