@@ -1,9 +1,9 @@
 <div align="center">
   <img src="https://cdn.modrinth.com/data/XaonJnsc/images/c6811a1d2ddbd2841eda9363adbac62af4f63d0e.gif">
   <h1>CTR VCR</h1>
-  <a href="https://www.curseforge.com/minecraft/shaders/ctr-vcr"><img src="https://img.shields.io/badge/CurseForge-202830?style=for-the-badge&logo=curseforge" alt="CurseForge"></a>
-  <a href="https://modrinth.com/shader/ctrvcr"><img src="https://img.shields.io/badge/Modrinth-202830?style=for-the-badge&logo=modrinth" alt="Modrinth"></a>
-  <a href="https://discord.gg/MvrwfmMcud"><img src="https://img.shields.io/badge/Discord-202830?style=for-the-badge&logo=discord" alt="Discord"></a>
+  <a href="https://www.curseforge.com/minecraft/shaders/ctr-vcr"><picture><source srcset="https://img.shields.io/badge/CurseForge-202830?style=for-the-badge&logo=curseforge" media="(prefers-color-scheme: dark)"><img src="https://img.shields.io/badge/CurseForge-white?style=for-the-badge&logo=curseforge" alt="CurseForge"></picture></a>
+  <a href="https://modrinth.com/shader/ctrvcr"><picture><source srcset="https://img.shields.io/badge/Modrinth-202830?style=for-the-badge&logo=modrinth" media="(prefers-color-scheme: dark)"><img src="https://img.shields.io/badge/Modrinth-white?style=for-the-badge&logo=modrinth" alt="Modrinth"></picture></a>
+  <a href="https://discord.gg/MvrwfmMcud"><picture><source srcset="https://img.shields.io/badge/Discord-202830?style=for-the-badge&logo=discord" media="(prefers-color-scheme: dark)"><img src="https://img.shields.io/badge/Discord-white?style=for-the-badge&logo=discord" alt="Discord"></picture></a>
   <br>
   <a>Stylized Minecraft Shader that brings artifacts from CRT and VCR / VHS</a>
 </div>
