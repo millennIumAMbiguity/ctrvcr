@@ -1,0 +1,57 @@
+name: Bug report
+description: Create a report to help us improve
+labels: bug
+body:
+- type: input
+  attributes:
+    label: CTR VCR version
+    description: What version of the shader does this issue occur on?
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Minecraft version
+    description: What version of the game does this issue occur on?
+  validations:
+    required: true
+- type: dropdown
+  attributes:
+    label: Mod Loader
+    description: What mod loaders does this issue occur on?
+    multiple: true
+    options:
+      - Forge
+      - NeoForge
+      - Fabric
+      - Quilt
+      - Other
+  validations:
+    required: true
+- type: dropdown
+  attributes:
+    label: Shader Loader
+    description: What shader loaders does this issue occur on?
+    multiple: true
+    options:
+      - Oprifine
+      - Iris
+      - Oculus
+      - Other
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Issue description
+    description: Describe what happens, and what you expect to happen instead
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Issue reproduction
+    description: Describe how to reproduce your issue
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Logs
+    description: Logs from shader loader

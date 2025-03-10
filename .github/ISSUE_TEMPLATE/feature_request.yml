@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest an idea for this project
+labels: enhancement
+body:
+- type: dropdown
+  attributes:
+    label: Feature type
+    description: What kind of feature request is this?
+    options:
+      - New feature
+      - New config
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Feature description
+    description: Describe your idea for this project
+  validations:
+    required: true
