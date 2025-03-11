@@ -2,17 +2,12 @@
 #include "/common/hash.glsl"
 
 uniform sampler2D colortex0;
-uniform sampler2D colortex1;
+uniform sampler2D colortex7;
 uniform float frameTimeCounter;
 uniform int blockEntityId;
 uniform float viewWidth;
 uniform float viewHeight;
 varying vec2 texcoord_vs;
-
-out vec4 fragColor;
-
-
-float xmy(vec4 v) { return v.x-v.y; }
 
 void main() {
 
@@ -110,9 +105,9 @@ void main() {
 	#endif
 
 	#ifdef PortalStatic
-			staticSum += xmy(texture2D(colortex1, cordA));
-			staticSum += xmy(texture2D(colortex1, cordB));
-			staticSum += xmy(texture2D(colortex1, cordC));
+			staticSum += texture2D(colortex7, cordA).b;
+			staticSum += texture2D(colortex7, cordB).b;
+			staticSum += texture2D(colortex7, cordC).b;
 	#endif
 		}
 
@@ -227,5 +222,5 @@ void main() {
 	sum *= min(a + v2*0.2, 1.0f);
 #endif
 
-	fragColor = vec4(sum, 1.0);
+	gl_FragData[0] = vec4(sum, 1.0);
 }

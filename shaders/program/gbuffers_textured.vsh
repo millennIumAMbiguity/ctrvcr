@@ -17,7 +17,6 @@ varying float mcEntity;
 varying vec3 mcEntityPos;
 #endif
 
-/* DRAWBUFFERS:01 */
 void main()
 {
 	mcEntity = mc_Entity;

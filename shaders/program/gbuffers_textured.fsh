@@ -59,7 +59,6 @@ vec2 offsetCoord(vec2 coord, vec2 offset, vec2 size) {
     return newCoord;
 }
 
-/* DRAWBUFFERS:01 */
 void main()
 {
 
@@ -124,10 +123,17 @@ void main()
     col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
 
     //Output the result.
+
+#ifdef PortalStatic
 	float e = mcEntity;
 #ifdef PortalParticles
 	if (renderStage == MC_RENDER_STAGE_PARTICLES && MYMatch(color.rgb)) {e = 2;}
 #endif
+
+    /* DRAWBUFFERS:07 */
     gl_FragData[0] = col;
-	gl_FragData[1] = vec4(e-1,0,0,0);
+	gl_FragData[1].b = e-1;
+#else
+    gl_FragData[0] = col;
+#endif
 }
