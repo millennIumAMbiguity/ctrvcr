@@ -1,3 +1,8 @@
+## 1.1.8
+### Fixes
+- Fixed purple edge on portals.
+- Fixed incorrect shader format version.
+
 ## 1.1.7
 ### Additions
 - Added AIWS texture distortion. (Disabled by default.)
