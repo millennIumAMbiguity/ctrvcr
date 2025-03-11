@@ -118,7 +118,7 @@ void main() {
 		}
 
 	#ifdef PortalStatic
-		staticSum = staticSum / 18.0;
+		staticSum = min(staticSum / 6.0, 1.0);
 	#endif
 
 	#if BloomSize >= 0
