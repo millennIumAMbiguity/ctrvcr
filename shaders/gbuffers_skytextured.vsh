@@ -1,4 +1,4 @@
-#version 130
+#version 120
 
 //Model * view matrix and it's inverse.
 uniform mat4 gbufferModelView;
