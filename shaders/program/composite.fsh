@@ -1,5 +1,5 @@
 #include "/settings.glsl"
-#include "/hash.glsl"
+#include "/common/hash.glsl"
 
 uniform sampler2D colortex0;
 uniform sampler2D colortex1;

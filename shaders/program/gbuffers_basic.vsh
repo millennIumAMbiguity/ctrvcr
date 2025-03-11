@@ -1,6 +1,3 @@
-//Declare GL version.
-#version 120
-
 //Model * view matrix and it's inverse.
 uniform mat4 gbufferModelView;
 uniform mat4 gbufferModelViewInverse;

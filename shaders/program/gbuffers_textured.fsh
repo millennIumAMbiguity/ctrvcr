@@ -1,5 +1,5 @@
 #include "/settings.glsl"
-#include "/hash.glsl"
+#include "/common/hash.glsl"
 
 //Diffuse (color) texture.
 uniform sampler2D texture;
