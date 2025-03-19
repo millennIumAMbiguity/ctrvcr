@@ -16,7 +16,7 @@ void main()
     gl_Position = gl_ProjectionMatrix * gbufferModelView * vec4(pos,1);
 
     //Output color to fragment shader.
-    color = vec4(gl_Color.rgb, gl_Color.a);
+    color = gl_Color;
     //Output diffuse texture coordinates to fragment shader.
     coord0 = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
 }
