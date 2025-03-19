@@ -1,7 +1,7 @@
 #include "/settings.glsl"
 
 //Get Entity id.
-attribute float mc_Entity;
+attribute vec2 mc_Entity;
 
 //Model * view matrix and it's inverse.
 uniform mat4 gbufferModelView;
@@ -11,7 +11,7 @@ uniform mat4 gbufferModelViewInverse;
 varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
-varying float mcEntity;
+varying vec2 mcEntity;
 
 #if AIWS_Source == 2
 varying vec3 mcEntityPos;
@@ -34,7 +34,7 @@ void main()
     //Calculate view space normal.
     vec3 normal = gl_NormalMatrix * gl_Normal;
     //Use flat for flat "blocks" or world space normal for solid blocks.
-    normal = (mc_Entity==1.) ? vec3(0,1,0) : (gbufferModelViewInverse * vec4(normal,0)).xyz;
+    normal = (mcEntity==1.) ? vec3(0,1,0) : (gbufferModelViewInverse * vec4(normal,0)).xyz;
 
     //Calculate simple lighting. Thanks to @PepperCode1
     float light = min(normal.x * normal.x * 0.6f + normal.y * normal.y * 0.25f * (3.0f + normal.y) + normal.z * normal.z * 0.8f, 1.0f);

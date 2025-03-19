@@ -30,7 +30,7 @@ varying vec4 color;
 //Diffuse and lightmap texture coordinates.
 varying vec2 coord0;
 varying vec2 coord1;
-varying float mcEntity;
+varying vec2 mcEntity;
 
 bool MYMatch (vec3 rgb) {
     float r = rgb.r;
@@ -68,42 +68,56 @@ void main()
     vec4 col;
 
 #if AIWS > 0
-    vec2 textureSize = vec2(textureSize(texture,0));
-    vec2 of = floor(coord0 * textureSize);
 
-    #if AIWS_Source == 0 // time
-        vec2 source = vec2(frameTimeCounter, frameTimeCounter);
-        source += vec2(1020, 1020);
-    #elif AIWS_Source == 1 // position
-        vec2 source = vec2(cameraPosition.x + cameraPosition.z, cameraPosition.y + cameraPosition.z);
-    #elif AIWS_Source == 2 // pos rot
-        vec2 source = vec2(mcEntityPos.x + mcEntityPos.z, mcEntityPos.y + mcEntityPos.z);
-    #else
-        vec2 source = vec2(cameraPosition.x + cameraPosition.z + frameTimeCounter, cameraPosition.y + cameraPosition.z + frameTimeCounter);
+    vec2 c0;
+
+    #if AIWS == 2
+    if (mcEntity.y > 0.5)
     #endif
-    source *= AIWS_Speed;
+    {
+        vec2 textureSize = vec2(textureSize(texture,0));
+        vec2 of = floor(coord0 * textureSize);
 
-    #if AIWS_Type == 0
-        float v = hash(of, sin(source.x + coord0.x*100));
-        float v2 = hash(of, cos(source.y + coord0.y*100 - 1000));
-    #elif AIWS_Type == 1
-        float v = hash(of, mod(source.x + coord0.x*100, 8192)) - 0.5f;
-        float v2 = hash(of, mod(source.y + coord0.y*100 - 1000, 8192)) - 0.5f;
-    #elif AIWS_Type == 2
-        float v = hash(of, tan(source.x + coord0.x*100 - 1000 + sin(source.x + coord0.y*coord0.x*100)));
-        float v2 = hash(of, tan(source.y + coord0.y*100 + sin(source.y + coord0.y*coord0.x*80 - 1000)));
-    #elif AIWS_Type == 3
-        float v = hash(of, coord0.x * AIWS_Speed);
-        float v2 = hash(of, coord0.y * AIWS_Speed);
-    #elif AIWS_Type == 4
-        float v = hash(of, source.x);
-        float v2 = hash(of, source.y);
-    #elif AIWS_Type == 5
-        float v = Random_float_t(of, 1f + mod(floor(source.x * 16f), 512));
-        float v2 = Random_float_t(of, 1f + mod(floor(source.y * 16f), 512));
+        #if AIWS_Source == 0 // time
+            vec2 source = vec2(frameTimeCounter, frameTimeCounter);
+            source += vec2(1020, 1020);
+        #elif AIWS_Source == 1 // position
+            vec2 source = vec2(cameraPosition.x + cameraPosition.z, cameraPosition.y + cameraPosition.z);
+        #elif AIWS_Source == 2 // pos rot
+            vec2 source = vec2(mcEntityPos.x + mcEntityPos.z, mcEntityPos.y + mcEntityPos.z);
+        #else
+            vec2 source = vec2(cameraPosition.x + cameraPosition.z + frameTimeCounter, cameraPosition.y + cameraPosition.z + frameTimeCounter);
+        #endif
+        source *= AIWS_Speed;
+
+        #if AIWS_Type == 0
+            float v = hash(of, sin(source.x + coord0.x*100));
+            float v2 = hash(of, cos(source.y + coord0.y*100 - 1000));
+        #elif AIWS_Type == 1
+            float v = hash(of, mod(source.x + coord0.x*100, 8192)) - 0.5f;
+            float v2 = hash(of, mod(source.y + coord0.y*100 - 1000, 8192)) - 0.5f;
+        #elif AIWS_Type == 2
+            float v = hash(of, tan(source.x + coord0.x*100 - 1000 + sin(source.x + coord0.y*coord0.x*100)));
+            float v2 = hash(of, tan(source.y + coord0.y*100 + sin(source.y + coord0.y*coord0.x*80 - 1000)));
+        #elif AIWS_Type == 3
+            float v = hash(of, coord0.x * AIWS_Speed);
+            float v2 = hash(of, coord0.y * AIWS_Speed);
+        #elif AIWS_Type == 4
+            float v = hash(of, source.x);
+            float v2 = hash(of, source.y);
+        #elif AIWS_Type == 5
+            float v = Random_float_t(of, 1f + mod(floor(source.x * 16f), 512));
+            float v2 = Random_float_t(of, 1f + mod(floor(source.y * 16f), 512));
+        #endif
+
+        c0 = offsetCoord(coord0, vec2(v, v2) * AIWS_Intensity, textureSize);
+    }
+    #if AIWS == 2
+    else 
+    {
+        c0 = coord0;
+    }
     #endif
-
-    vec2 c0 = offsetCoord(coord0, vec2(v, v2) * AIWS_Intensity, textureSize);
 
     //Sample texture times lighting.
     col = color * vec4(light,1) * texture2D(texture,c0);
@@ -125,14 +139,14 @@ void main()
     //Output the result.
 
 #ifdef PortalStatic
-	float e = mcEntity;
-#ifdef PortalParticles
-	if (renderStage == MC_RENDER_STAGE_PARTICLES && MYMatch(color.rgb)) {e = 2;}
-#endif
+	float e = mcEntity.x;
+    #ifdef PortalParticles
+	    if (renderStage == MC_RENDER_STAGE_PARTICLES && MYMatch(color.rgb)) {e = 2;}
+    #endif
 
     /* DRAWBUFFERS:07 */
     gl_FragData[0] = col;
-	gl_FragData[1].b = e-1;
+	gl_FragData[1].b = (e > 1.5 && e < 2.5) ? 1 : 0;
 #else
     gl_FragData[0] = col;
 #endif

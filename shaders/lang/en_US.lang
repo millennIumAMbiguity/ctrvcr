@@ -40,6 +40,7 @@ value.GrainIntesity.-1=Off
 
 value.AIWS.0=Disabled
 value.AIWS.1=Enabled
+value.AIWS.2=Fluids
 
 value.AIWS_Source.0=Time
 value.AIWS_Source.1=Position
