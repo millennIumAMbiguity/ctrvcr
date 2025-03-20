@@ -2,6 +2,7 @@
 
 screen.PixelSize=Pixel Size
 screen.ScreenTear=Screen Tear
+screen.LightingColor=Lighting Color
 
 option.PortalStatic=Portal Static
 option.PortalParticles=Portal Particles
@@ -24,6 +25,16 @@ option.AIWS_Type=Mode
 option.AIWS_Source=Source
 option.AIWS_Speed=Speed
 option.AIWS_Intensity=Intensity
+option.LightingStrength=Lighting Strength
+option.DarknessIntensity=Darkness Intensity
+option.ColorLightSkyR=Sky Light Red
+option.ColorLightSkyG=Sky Light Green
+option.ColorLightSkyB=Sky Light Blue
+option.ColorLightBlockR=Block Light Red
+option.ColorLightBlockG=Block Light Green
+option.ColorLightBlockB=Block Light Blue
+option.LightmapDitering=Lightmap Ditering
+option.DitterFog=Ditter Fog
 
 value.DarkEdges.-1=Off
 value.BlurSize.-1=Off
@@ -37,6 +48,10 @@ value.DistortionFactor.-1=Off
 value.ScanlineIntensity.-1=Off
 value.BNW.0=Off
 value.GrainIntesity.-1=Off
+value.LightmapDitering.-1=Off
+
+value.LightingStrength.-1=1.0
+value.DarknessIntensity.-1=1.0
 
 value.AIWS.0=Disabled
 value.AIWS.1=Enabled

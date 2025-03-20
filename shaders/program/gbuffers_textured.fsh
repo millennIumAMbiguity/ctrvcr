@@ -19,8 +19,8 @@ uniform int renderStage;
 uniform float frameTimeCounter;
 #endif
 
-#if AIWS_Source == 2
 varying vec3 mcEntityPos;
+#if AIWS_Source == 2
 #elif AIWS_Source > 0
 uniform vec3 cameraPosition;
 #endif
@@ -31,6 +31,9 @@ varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
+#if LightmapDitering >= 0
+varying vec3 worldPos;
+#endif
 
 bool MYMatch (vec3 rgb) {
     float r = rgb.r;
@@ -61,9 +64,29 @@ vec2 offsetCoord(vec2 coord, vec2 offset, vec2 size) {
 
 void main()
 {
-
     //Combine lightmap with blindness.
-    vec3 light = (1.-blindness) * texture2D(lightmap,coord1).rgb;
+    vec3 light = max(coord1.x * vec3(ColorLightBlockR, ColorLightBlockG, ColorLightBlockB), coord1.y * vec3(ColorLightSkyR, ColorLightSkyG, ColorLightSkyB));
+
+    // ColorLightSkyR ColorLightSkyG ColorLightSkyB ColorLightBlockR ColorLightBlockG ColorLightBlockB
+
+    float time8 = mod(frameTimeCounter * 7.987, 8192);
+#if LightmapDitering >= 0
+    if (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID) {
+        light = (1.-blindness) * clamp(light + (LightmapDitering * Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) / 16.), 0., 1.);
+    } else
+#endif
+    {
+        light *= (1.-blindness);
+    }
+
+    // Apply darkness and lighting strength.
+#if DarknessIntensity > 0
+    light = pow(light, vec3(DarknessIntensity));
+#endif
+
+#if LightingStrength > 0
+    light *= LightingStrength;
+#endif
 
     vec4 col;
 
@@ -130,11 +153,19 @@ void main()
     col.rgb = mix(col.rgb,entityColor.rgb,entityColor.a);
 
     //Calculate fog intensity in or out of water.
+#ifdef DitterFog
+    if (isEyeInWater>0) {
+        col.rgb = mix(col.rgb, gl_Fog.color.rgb, 1.-exp(-gl_FogFragCoord * gl_Fog.density));
+    }
+    else if (Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) < clamp((gl_FogFragCoord-gl_Fog.start) * gl_Fog.scale, 0., 1.)) {
+        discard;
+    }
+#else
     float fog = (isEyeInWater>0) ? 1.-exp(-gl_FogFragCoord * gl_Fog.density):
     clamp((gl_FogFragCoord-gl_Fog.start) * gl_Fog.scale, 0., 1.);
 
-    //Apply the fog.
     col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
+#endif
 
     //Output the result.
 

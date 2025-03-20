@@ -7,11 +7,16 @@ attribute vec2 mc_Entity;
 uniform mat4 gbufferModelView;
 uniform mat4 gbufferModelViewInverse;
 
+#include "/common/getWorldPosition.vsh"
+
 //Pass vertex information to fragment shader.
 varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
+#if LightmapDitering >= 0
+varying vec3 worldPos;
+#endif
 
 #if AIWS_Source == 2
 varying vec3 mcEntityPos;
@@ -26,6 +31,10 @@ void main()
     mcEntityPos = pos;
 #endif
     pos = (gbufferModelViewInverse * vec4(pos,1)).xyz;
+
+#if LightmapDitering >= 0
+    worldPos = getWorldPosition();
+#endif
 
     //Output position and fog to fragment shader.
     gl_Position = gl_ProjectionMatrix * gbufferModelView * vec4(pos,1);
