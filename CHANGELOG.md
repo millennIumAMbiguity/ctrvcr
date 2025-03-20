@@ -1,3 +1,15 @@
+## 1.1.9
+### Additions
+- Added LightmapDitering
+- Added LightingStrength
+- Added DarknessIntensity
+- Added DitterFog
+- Added AIWS mode Fluids
+### Changes
+- Changed default AIWS_Intensity from 1.0 to 0.5
+- Changed default BloomSize from 0.8 to 0.9
+- Set AIWS default to Fluids
+
 ## 1.1.8
 ### Fixes
 - Fixed purple edge on portals.
