@@ -1,8 +1,15 @@
 #shaders/lang/en_us.lang
 
+profile.DISABLED=§cDisabled
+profile.DEFAULT=§aDefault
+profile.STRONG=§eStrong
+profile.EXTREME=§e§lExtreme
+profile.AIWS=§kAIWS
+
 screen.PixelSize=Pixel Size
 screen.ScreenTear=Screen Tear
 screen.LightingColor=Lighting Color
+screen.AIWS=§kAIWS
 
 option.PortalStatic=Portal Static
 option.PortalParticles=Portal Particles
@@ -20,40 +27,46 @@ option.RenderPixelSize=Render Pixel Size
 option.FXPixelSize=FX Pixel Size
 option.ScanlinePixelSize=Scanline Pixel Size
 option.BNW=Black and White
+option.BNWPreeTint=Run BNW before tint
 option.GrainIntesity=Grain Intesity
+option.AIWS=Effect
 option.AIWS_Type=Mode
 option.AIWS_Source=Source
 option.AIWS_Speed=Speed
 option.AIWS_Intensity=Intensity
 option.LightingStrength=Lighting Strength
 option.DarknessIntensity=Darkness Intensity
-option.ColorLightSkyR=Sky Light Red
-option.ColorLightSkyG=Sky Light Green
-option.ColorLightSkyB=Sky Light Blue
-option.ColorLightBlockR=Block Light Red
-option.ColorLightBlockG=Block Light Green
-option.ColorLightBlockB=Block Light Blue
+option.MoonlightStrength=Moonlight Strength
+option.ColorLightSkyR=§cSky
+option.ColorLightSkyG=§aSky
+option.ColorLightSkyB=§bSky
+option.ColorLightSunriseR=§cSunrise
+option.ColorLightSunriseG=§aSunrise
+option.ColorLightSunriseB=§bSunrise
+option.ColorLightBlockR=§cBlock
+option.ColorLightBlockG=§aBlock
+option.ColorLightBlockB=§bBlock
 option.LightmapDitering=Lightmap Ditering
 option.DitterFog=Ditter Fog
 
-value.DarkEdges.-1=Off
-value.BlurSize.-1=Off
-value.Static.-1=Off
-value.ScreenTearSize.-1=Off
-value.ScreenTearDelay.-1=Off
-value.ScreenTearSpeed.-1=Off
-value.StaticTearChance.1000=Off
-value.BloomSize.-1=Off
-value.DistortionFactor.-1=Off
-value.ScanlineIntensity.-1=Off
-value.BNW.0=Off
-value.GrainIntesity.-1=Off
-value.LightmapDitering.-1=Off
+value.DarkEdges.-1=§cOff
+value.BlurSize.-1=§cOff
+value.Static.-1=§cOff
+value.ScreenTearSize.-1=§cOff
+value.ScreenTearDelay.-1=§cOff
+value.ScreenTearSpeed.-1=§cOff
+value.StaticTearChance.1000=§cOff
+value.BloomSize.-1=§cOff
+value.DistortionFactor.-1=§cOff
+value.ScanlineIntensity.-1=§cOff
+value.BNW.-1=§cOff
+value.GrainIntesity.-1=§cOff
+value.LightmapDitering.-1=§cOff
 
-value.LightingStrength.-1=1.0
-value.DarknessIntensity.-1=1.0
+value.LightingStrength.-1=1.0x
+value.DarknessIntensity.-1=1.0x
 
-value.AIWS.0=Disabled
+value.AIWS.0=§cDisabled
 value.AIWS.1=Enabled
 value.AIWS.2=Fluids
 
@@ -81,8 +94,11 @@ suffix.Red=x
 suffix.Green=x
 suffix.Blue=x
 suffix.GrainIntesity=x
+suffix.LightingStrength=x
+suffix.DarknessIntensity=x
+suffix.MoonlightStrength=x
 
 option.DarkEdges.comment=Percent of screen width the effect is offset per side.
 option.PortalStatic.comment=Makes nether portals and portal particles render as static.
 option.StaticTearChance.comment=Chance that static tears / horizontal lines of static does not appear.
-option.AIWS.comment=Alice in Wonderland Syndrome
+option.AIWS.comment=Sets what AIWS (Alice in wonderland syndrome) runs on.

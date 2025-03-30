@@ -9,6 +9,10 @@ uniform float viewWidth;
 uniform float viewHeight;
 varying vec2 texcoord_vs;
 
+// Dont remove this two lines, they are needed for the shader reconise BNWPreTint as a config
+#ifdef BNWPreTint
+#endif
+
 void main() {
 
 	float time = mod(frameTimeCounter, 8192);
@@ -50,19 +54,8 @@ void main() {
 	float vRow = Random_float(vec2(time, int(uvy)));
 
 	// Screen Tear
-#if ScreenTearSpeed < 1
-	if (ScreenTearSpeed <= 0) {
-		float offset = ScreenTearDelay * 0.001;
-
-		if (uvy < ScreenTearSize + offset && uvy > offset) {
-			texcoord.y = uvy = fract(offset);
-			#ifdef ScreenTearSolid
-			texcoordScaled.y = uvy;
-			#endif
-		}
-	} else 
-#endif
-	{
+#if ScreenTearSize >= 0
+	#if ScreenTearSpeed >= 0
 		float y1 = mod(ScreenTearSpeed * time + ScreenTearSize, ScreenTearDelay + ScreenTearSize);
 		float y2 = uvy-y1;
 		if (y2 < 0.0f && y2 > -ScreenTearSize) {
@@ -71,7 +64,17 @@ void main() {
 			texcoordScaled.y = uvy;
 			#endif
 		}
-	}
+	#else
+		float offset = ScreenTearDelay * 0.001;
+
+		if (uvy < ScreenTearSize + offset && uvy > offset) {
+			texcoord.y = uvy = fract(offset);
+			#ifdef ScreenTearSolid
+			texcoordScaled.y = uvy;
+			#endif
+		}
+	#endif
+#endif
 
 	vec3 sum = vec3(0);
 
@@ -178,6 +181,11 @@ void main() {
 		center[2]);
 #endif
 
+#if defined(BNWPreTint) && BNW >= 0
+	float bnw = (sum[0] + sum[1] + sum[2]) / 3;
+	sum = mix(sum, vec3(bnw), BNW);
+#endif
+
 	sum[0] *= Red;
 	sum[1] *= Green;
 	sum[2] *= Blue;
@@ -186,12 +194,9 @@ void main() {
 	sum += sum * (0.5f-v) * GrainIntesity;
 #endif
 
-#if BNW == 100
+#if !defined(BNWPreTint) && BNW >= 0
 	float bnw = (sum[0] + sum[1] + sum[2]) / 3;
-	sum = vec3(bnw);
-#elif BNW > 0
-	float bnw = (sum[0] + sum[1] + sum[2]) / 3;
-	sum = mix(sum, vec3(bnw), BNW/100.0);
+	sum = mix(sum, vec3(bnw), BNW);
 #endif
 
 	// Static and tearing

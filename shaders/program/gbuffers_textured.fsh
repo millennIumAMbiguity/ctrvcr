@@ -12,6 +12,10 @@ uniform vec4 entityColor;
 uniform float blindness;
 //0 = default, 1 = water, 2 = lava.
 uniform int isEyeInWater;
+// 0-1 sun bitghness.
+uniform float sunAngle;
+// 0-1 rain amount.
+uniform float rainStrength;
 
 uniform int renderStage;
 
@@ -62,12 +66,30 @@ vec2 offsetCoord(vec2 coord, vec2 offset, vec2 size) {
     return newCoord;
 }
 
+vec3 CalculateLightStrengthAndColor(float x)
+{
+    #if MoonlightStrength >= 1
+        float sunLightStrength = coord1.y;
+    #else
+        float sunLightStrength = clamp(sin(x * PI2) * 2 + .2, MoonlightStrength, 1.) * coord1.y;
+    #endif
+
+    float sunrise = sunLightStrength * (max(cos(x * PI2 + .1) * 2 - 1, 0) + max(cos(x * PI2 + .1 + PI) * 2 - 1, 0));
+
+    vec3 sunLight = sunLightStrength * vec3(ColorLightSkyR, ColorLightSkyG, ColorLightSkyB);
+    vec3 sunsetLight = sunrise * vec3(ColorLightSunriseR, ColorLightSunriseG, ColorLightSunriseB);
+    vec3 skyLight = max(sunLight, sunsetLight) * (1. - rainStrength / 2.);
+
+    vec3 blockLight = coord1.x * vec3(ColorLightBlockR, ColorLightBlockG, ColorLightBlockB);
+
+    // 33% bleed between block and sky light, 67% of the stronger light.
+    return (blockLight + skyLight) * .33 + max(blockLight, skyLight) * .67;
+}
+
 void main()
 {
     //Combine lightmap with blindness.
-    vec3 light = max(coord1.x * vec3(ColorLightBlockR, ColorLightBlockG, ColorLightBlockB), coord1.y * vec3(ColorLightSkyR, ColorLightSkyG, ColorLightSkyB));
-
-    // ColorLightSkyR ColorLightSkyG ColorLightSkyB ColorLightBlockR ColorLightBlockG ColorLightBlockB
+    vec3 light = CalculateLightStrengthAndColor(sunAngle);
 
     float time8 = mod(frameTimeCounter * 7.987, 8192);
 #if LightmapDitering >= 0
@@ -80,7 +102,7 @@ void main()
     }
 
     // Apply darkness and lighting strength.
-#if DarknessIntensity > 0
+#if DarknessIntensity >= 0
     light = pow(light, vec3(DarknessIntensity));
 #endif
 
