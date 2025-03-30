@@ -1,14 +1,28 @@
+## 1.2.0
+### Additions
+- Added profiles.
+- Added sunrise tint config.
+- Added option to perform BNW before tint.
+- Added config for moon light brightness.
+### Changes
+- Changed ScreenTearSolid default to false.
+- Changed AIWS default to Disabled.
+- Several changes to configs.
+### Fixes
+- Fixed issues with lightning.
+- Fixed bug where DarknessIntensity did not work when under 1.0x.
+
 ## 1.1.9
 ### Additions
-- Added LightmapDitering
-- Added LightingStrength
-- Added DarknessIntensity
-- Added DitterFog
-- Added AIWS mode Fluids
+- Added LightmapDitering.
+- Added LightingStrength.
+- Added DarknessIntensity.
+- Added DitterFog.
+- Added AIWS mode Fluids.
 ### Changes
 - Changed default AIWS_Intensity from 1.0 to 0.5
 - Changed default BloomSize from 0.8 to 0.9
-- Set AIWS default to Fluids
+- Set AIWS default to Fluids.
 
 ## 1.1.8
 ### Fixes
