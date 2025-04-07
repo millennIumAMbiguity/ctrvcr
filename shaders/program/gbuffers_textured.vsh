@@ -43,7 +43,7 @@ void main()
     //Calculate view space normal.
     vec3 normal = gl_NormalMatrix * gl_Normal;
     //Use flat for flat "blocks" or world space normal for solid blocks.
-    normal = (mcEntity==1.) ? vec3(0,1,0) : (gbufferModelViewInverse * vec4(normal,0)).xyz;
+    normal = (mcEntity.x==1.) ? vec3(0,1,0) : (gbufferModelViewInverse * vec4(normal,0)).xyz;
 
     //Calculate simple lighting. Thanks to @PepperCode1
     float light = min(normal.x * normal.x * 0.6f + normal.y * normal.y * 0.25f * (3.0f + normal.y) + normal.z * normal.z * 0.8f, 1.0f);
