@@ -1,3 +1,7 @@
+## 1.2.1
+### Fixes
+ - Fixed error for AMD GPUs
+
 ## 1.2.0
 ### Additions
 - Added profiles.
