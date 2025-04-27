@@ -1,4 +1,4 @@
-#include "/settings.glsl"
+#include "/shader.h"
 
 //Get Entity id.
 attribute vec2 mc_Entity;
@@ -14,7 +14,7 @@ varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
-#if LightmapDitering >= 0
+#if LightmapDitering != -1 || defined(DitterFog)
 varying vec3 worldPos;
 #endif
 
@@ -32,7 +32,7 @@ void main()
 #endif
     pos = (gbufferModelViewInverse * vec4(pos,1)).xyz;
 
-#if LightmapDitering >= 0
+#if LightmapDitering != -1 || defined(DitterFog)
     worldPos = getWorldPosition();
 #endif
 

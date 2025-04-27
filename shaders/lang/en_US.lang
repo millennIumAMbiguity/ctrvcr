@@ -2,6 +2,7 @@
 
 profile.DISABLED=§cDisabled
 profile.DEFAULT=§aDefault
+profile.OPTIFINE_COMPAT=Optifine Compatibility
 profile.STRONG=§eStrong
 profile.EXTREME=§e§lExtreme
 profile.AIWS=§kAIWS
@@ -27,7 +28,7 @@ option.RenderPixelSize=Render Pixel Size
 option.FXPixelSize=FX Pixel Size
 option.ScanlinePixelSize=Scanline Pixel Size
 option.BNW=Black and White
-option.BNWPreeTint=Run BNW before tint
+option.BNWPreTint=Run BNW before tint
 option.GrainIntesity=Grain Intesity
 option.AIWS=Effect
 option.AIWS_Type=Mode
@@ -55,7 +56,7 @@ value.Static.-1=§cOff
 value.ScreenTearSize.-1=§cOff
 value.ScreenTearDelay.-1=§cOff
 value.ScreenTearSpeed.-1=§cOff
-value.StaticTearChance.1000=§cOff
+value.StaticTearChance.-1=§cOff
 value.BloomSize.-1=§cOff
 value.DistortionFactor.-1=§cOff
 value.ScanlineIntensity.-1=§cOff
@@ -83,22 +84,30 @@ value.AIWS_Type.4=Basic
 value.AIWS_Type.5=Hard
 
 suffix.DarkEdges=%
-suffix.Static=%
 suffix.BNW=%
+suffix.Red=%
+suffix.Green=%
+suffix.Blue=%
+suffix.GrainIntesity=%
+suffix.LightingStrength=%
+suffix.DarknessIntensity=%
+suffix.MoonlightStrength=%
+suffix.ColorLightSkyR=%
+suffix.ColorLightSkyG=%
+suffix.ColorLightSkyB=%
+suffix.ColorLightSunriseR=%
+suffix.ColorLightSunriseG=%
+suffix.ColorLightSunriseB=%
+suffix.ColorLightBlockR=%
+suffix.ColorLightBlockG=%
+suffix.ColorLightBlockB=%
 
 suffix.RenderPixelSize= px
 suffix.FXPixelSize= px
 suffix.ScanlinePixelSize= px
 
-suffix.Red=x
-suffix.Green=x
-suffix.Blue=x
-suffix.GrainIntesity=x
-suffix.LightingStrength=x
-suffix.DarknessIntensity=x
-suffix.MoonlightStrength=x
 
 option.DarkEdges.comment=Percent of screen width the effect is offset per side.
 option.PortalStatic.comment=Makes nether portals and portal particles render as static.
-option.StaticTearChance.comment=Chance that static tears / horizontal lines of static does not appear.
+option.StaticTearChance.comment=Chance that static tears / horizontal lines of static appears.
 option.AIWS.comment=Sets what AIWS (Alice in wonderland syndrome) runs on.

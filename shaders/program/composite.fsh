@@ -1,4 +1,4 @@
-#include "/settings.glsl"
+#include "/shader.h"
 #include "/common/hash.glsl"
 
 uniform sampler2D colortex0;
@@ -18,13 +18,13 @@ void main() {
 	float time = mod(frameTimeCounter, 8192);
 	float time8 = mod(frameTimeCounter * 7.987, 8192);
 
-#if DistortionFactor < 0
+#if DistortionFactor == -1
 	vec2 texcoord = texcoord_vs;
 #else
 	vec2 dir = texcoord_vs - vec2(0.5, 0.5);  // Direction from the center
 	float dist = length(dir);                  // Distance from the center
-	float distortion = 1.0 + DistortionFactor * dist * dist;  // Apply non-linear distortion
-	vec2 texcoord = vec2(0.5, 0.5) + dir * distortion * (1-(DistortionFactor/3));  // Modify the UV coordinates
+	float distortion = 1.0 + DistortionFactor_F * dist * dist;  // Apply non-linear distortion
+	vec2 texcoord = vec2(0.5, 0.5) + dir * distortion * (1-(DistortionFactor_F/3));  // Modify the UV coordinates
 #endif
 
 // Resolutino scaling
@@ -47,27 +47,27 @@ void main() {
 	float uvy = texcoordScaled.y;
 	float uvx = texcoordScaled.x;
 
-	float v = hash(texcoord, time8);
-	float v2 = hash(texcoord, time8 + 456.789);
+	float v = hash(texcoord_vs, time8);
+	float v2 = hash(texcoord_vs, time8 + 456.789);
 
 
 	float vRow = Random_float(vec2(time, int(uvy)));
 
 	// Screen Tear
-#if ScreenTearSize >= 0
-	#if ScreenTearSpeed >= 0
-		float y1 = mod(ScreenTearSpeed * time + ScreenTearSize, ScreenTearDelay + ScreenTearSize);
+#if ScreenTearSize != -1
+	#if ScreenTearSpeed != -1
+		float y1 = mod(ScreenTearSpeed_F * time + ScreenTearSize_F, ScreenTearDelay_F + ScreenTearSize_F);
 		float y2 = uvy-y1;
-		if (y2 < 0.0f && y2 > -ScreenTearSize) {
+		if (y2 < 0.0f && y2 > -ScreenTearSize_F) {
 			texcoord.y = uvy = fract(y1);
 			#ifdef ScreenTearSolid
 			texcoordScaled.y = uvy;
 			#endif
 		}
 	#else
-		float offset = ScreenTearDelay * 0.001;
+		float offset = ScreenTearDelay_F * 0.001;
 
-		if (uvy < ScreenTearSize + offset && uvy > offset) {
+		if (uvy < ScreenTearSize_F + offset && uvy > offset) {
 			texcoord.y = uvy = fract(offset);
 			#ifdef ScreenTearSolid
 			texcoordScaled.y = uvy;
@@ -79,8 +79,8 @@ void main() {
 	vec3 sum = vec3(0);
 
 	// Bloom
-#if BloomSize >= 0 || defined(PortalStatic)
-	#if BloomSize >= 0
+#if BloomSize != -1 || defined(PortalStatic)
+	#if BloomSize != -1
 		vec3 color = texture2D(colortex0, texcoordScaled).rgb;
 		vec3 bloom;
 	#endif
@@ -101,10 +101,10 @@ void main() {
 			vec2 cordB = texcoordScaled + vec2( v5, v3)*0.004;
 			vec2 cordC = texcoordScaled + vec2( 1 + v6, v3)*0.004;
 
-	#if BloomSize >= 0
-			sum += texture2D(colortex0, cordA).xyz * BloomSize;
-			sum += texture2D(colortex0, cordB).xyz * BloomSize;
-			sum += texture2D(colortex0, cordC).xyz * BloomSize;
+	#if BloomSize != -1
+			sum += texture2D(colortex0, cordA).xyz * BloomSize_F;
+			sum += texture2D(colortex0, cordB).xyz * BloomSize_F;
+			sum += texture2D(colortex0, cordC).xyz * BloomSize_F;
 	#endif
 
 	#ifdef PortalStatic
@@ -118,7 +118,7 @@ void main() {
 		staticSum = min(staticSum / 6.0, 1.0);
 	#endif
 
-	#if BloomSize >= 0
+	#if BloomSize != -1
 
 		if (color.r < 0.3 && color.g < 0.3 && color.b < 0.3)
 		{
@@ -136,24 +136,24 @@ void main() {
 			}
 		}
 		
-		bloom = mix(color, bloom, BloomSize);
+		bloom = mix(color, bloom, BloomSize_F);
 
 		
 		float sumSingle = (bloom.r + bloom.g + bloom.b) / 3.0;
 		float tanSum = tan(min(sumSingle * 1.5, 1.57079632679))/ 64;
-		float _BlurSize = clamp(BlurSize * tanSum, BlurSize, 0.01);
+		float _BlurSize = clamp(BlurSize_F * tanSum, BlurSize_F , 0.01);
 	#else
-		float _BlurSize = BlurSize;
+		float _BlurSize = BlurSize_F ;
 	#endif
 #else
-	float _BlurSize = BlurSize;
+	float _BlurSize = BlurSize_F ;
 #endif
 
 	// blur and aberration
 	float v2Scaled = v2 * _BlurSize;
 	float vScaled = v * _BlurSize;
 	float vHalf = vScaled / 2;
-#if BlurSize >= 0
+#if BlurSize != -1
 	float BlurSize2 = _BlurSize / 4;
 
 	vec3 left1 = texture2D(colortex0, vec2(uvx - vScaled, uvy + vScaled / 3.0)).rgb;
@@ -166,14 +166,14 @@ void main() {
 	vec3 center = texture2D(colortex0, vec2(uvx, uvy)).rgb;
 #endif
 
-#if BloomSize >= 0
+#if BloomSize != -1
 	center = center / 2.0 + bloom / 2.0;
 #endif
 
 	sum = vec3(
-#if BlurSize >= 0
+#if BlurSize != -1
 		(left1[0] + left2[0] + center[0])/3,
-		center[1] * (1. - (BloomSize / 4.)),
+		center[1] * (1. - (BloomSize_F / 4.)),
 		(right1[2] + right2[2] + center[2])/3);
 #else
 		center[0],
@@ -181,34 +181,34 @@ void main() {
 		center[2]);
 #endif
 
-#if defined(BNWPreTint) && BNW >= 0
+#if defined(BNWPreTint) && BNW != -1
 	float bnw = (sum[0] + sum[1] + sum[2]) / 3;
-	sum = mix(sum, vec3(bnw), BNW);
+	sum = mix(sum, vec3(bnw), BNW_F);
 #endif
 
-	sum[0] *= Red;
-	sum[1] *= Green;
-	sum[2] *= Blue;
+	sum[0] *= Red_F;
+	sum[1] *= Green_F;
+	sum[2] *= Blue_F;
 
-#if GrainIntesity >= 0
-	sum += sum * (0.5f-v) * GrainIntesity;
+#if GrainIntesity != -1
+	sum += sum * (0.5f-v) * GrainIntesity_F;
 #endif
 
-#if !defined(BNWPreTint) && BNW >= 0
+#if !defined(BNWPreTint) && BNW != -1
 	float bnw = (sum[0] + sum[1] + sum[2]) / 3;
-	sum = mix(sum, vec3(bnw), BNW);
+	sum = mix(sum, vec3(bnw), BNW_F);
 #endif
 
 	// Static and tearing
 #ifdef PortalStatic
-	float _static = max(Static + staticSum, Static);
+	float _static = max(Static_F + staticSum, Static_F);
 #else
-	float _static = Static;
+	float _static = Static_F;
 #endif
 
-#if StaticTearChance < 400
-	float l = abs(vRow - texcoord.y)*StaticTearChance;
-	if (StaticTearChance < 400 && l < 0.004f*v) _static = 1-min(l,0.05f*v)*50/v;
+#if StaticTearChance != -1
+	float l = abs(vRow - texcoord.y)*StaticTearChance_F;
+	if (l < 0.004f*v) _static = 1-min(l,0.05f*v)*50/v;
 #endif
 
 	if (v < _static)

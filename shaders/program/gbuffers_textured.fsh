@@ -1,4 +1,4 @@
-#include "/settings.glsl"
+#include "/shader.h"
 #include "/common/hash.glsl"
 
 //Diffuse (color) texture.
@@ -35,7 +35,7 @@ varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
-#if LightmapDitering >= 0
+#if LightmapDitering != -1 || defined(DitterFog)
 varying vec3 worldPos;
 #endif
 
@@ -68,22 +68,22 @@ vec2 offsetCoord(vec2 coord, vec2 offset, vec2 size) {
 
 vec3 CalculateLightStrengthAndColor(float x)
 {
-    #if MoonlightStrength >= 1
+    #if MoonlightStrength == -1
         float sunLightStrength = coord1.y;
     #else
-        float sunLightStrength = clamp(sin(x * PI2) * 2 + .2, MoonlightStrength, 1.) * coord1.y;
+        float sunLightStrength = clamp(sin(x * PI2) * 2 + 0.2, MoonlightStrength_F, 1.) * coord1.y;
     #endif
 
-    float sunrise = sunLightStrength * (max(cos(x * PI2 + .1) * 2 - 1, 0) + max(cos(x * PI2 + .1 + PI) * 2 - 1, 0));
+    float sunrise = sunLightStrength * (max(cos(x * PI2 + 0.1) * 2 - 1, 0) + max(cos(x * PI2 + 0.1 + PI) * 2 - 1, 0));
 
-    vec3 sunLight = sunLightStrength * vec3(ColorLightSkyR, ColorLightSkyG, ColorLightSkyB);
-    vec3 sunsetLight = sunrise * vec3(ColorLightSunriseR, ColorLightSunriseG, ColorLightSunriseB);
+    vec3 sunLight = sunLightStrength * vec3(ColorLightSkyR_F, ColorLightSkyG_F, ColorLightSkyB_F);
+    vec3 sunsetLight = sunrise * vec3(ColorLightSunriseR_F, ColorLightSunriseG_F, ColorLightSunriseB_F);
     vec3 skyLight = max(sunLight, sunsetLight) * (1. - rainStrength / 2.);
 
-    vec3 blockLight = coord1.x * vec3(ColorLightBlockR, ColorLightBlockG, ColorLightBlockB);
+    vec3 blockLight = coord1.x * vec3(ColorLightBlockR_F, ColorLightBlockG_F, ColorLightBlockB_F);
 
     // 33% bleed between block and sky light, 67% of the stronger light.
-    return (blockLight + skyLight) * .33 + max(blockLight, skyLight) * .67;
+    return (blockLight + skyLight) * .33 + max(blockLight, skyLight) * 0.67;
 }
 
 void main()
@@ -92,9 +92,9 @@ void main()
     vec3 light = CalculateLightStrengthAndColor(sunAngle);
 
     float time8 = mod(frameTimeCounter * 7.987, 8192);
-#if LightmapDitering >= 0
+#if LightmapDitering != -1
     if (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID) {
-        light = (1.-blindness) * clamp(light + (LightmapDitering * Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) / 16.), 0., 1.);
+        light = (1.-blindness) * max(light + (LightmapDitering_F * Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) / 16.0), 0.0);
     } else
 #endif
     {
@@ -103,11 +103,11 @@ void main()
 
     // Apply darkness and lighting strength.
 #if DarknessIntensity >= 0
-    light = pow(light, vec3(DarknessIntensity));
+    light = pow(light, vec3(DarknessIntensity_F));
 #endif
 
-#if LightingStrength > 0
-    light *= LightingStrength;
+#if LightingStrength != -1
+    light *= LightingStrength_F;
 #endif
 
     vec4 col;
@@ -133,7 +133,7 @@ void main()
         #else
             vec2 source = vec2(cameraPosition.x + cameraPosition.z + frameTimeCounter, cameraPosition.y + cameraPosition.z + frameTimeCounter);
         #endif
-        source *= AIWS_Speed;
+        source *= AIWS_Speed_F;
 
         #if AIWS_Type == 0
             float v = hash(of, sin(source.x + coord0.x*100));
@@ -145,8 +145,8 @@ void main()
             float v = hash(of, tan(source.x + coord0.x*100 - 1000 + sin(source.x + coord0.y*coord0.x*100)));
             float v2 = hash(of, tan(source.y + coord0.y*100 + sin(source.y + coord0.y*coord0.x*80 - 1000)));
         #elif AIWS_Type == 3
-            float v = hash(of, coord0.x * AIWS_Speed);
-            float v2 = hash(of, coord0.y * AIWS_Speed);
+            float v = hash(of, coord0.x * AIWS_Speed_F);
+            float v2 = hash(of, coord0.y * AIWS_Speed_F);
         #elif AIWS_Type == 4
             float v = hash(of, source.x);
             float v2 = hash(of, source.y);
@@ -155,7 +155,7 @@ void main()
             float v2 = Random_float_t(of, 1f + mod(floor(source.y * 16f), 512));
         #endif
 
-        c0 = offsetCoord(coord0, vec2(v, v2) * AIWS_Intensity, textureSize);
+        c0 = offsetCoord(coord0, vec2(v, v2) * AIWS_Intensity_F, textureSize);
     }
     #if AIWS == 2
     else 
