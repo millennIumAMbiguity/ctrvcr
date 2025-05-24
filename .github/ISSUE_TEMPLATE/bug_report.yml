@@ -39,6 +39,12 @@ body:
       - Other
   validations:
     required: true
+- type: input
+  attributes:
+    label: Graphics card
+    description: What GPU does this issue occur on?
+  validations:
+    required: true
 - type: textarea
   attributes:
     label: Issue description
