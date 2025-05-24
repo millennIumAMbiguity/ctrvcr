@@ -79,13 +79,13 @@ void main() {
 	vec3 sum = vec3(0);
 
 	// Bloom
-#if BloomSize != -1 || defined(PortalStatic)
+#if BloomSize != -1 || defined PortalStatic_IRIS
 	#if BloomSize != -1
 		vec3 color = texture2D(colortex0, texcoordScaled).rgb;
 		vec3 bloom;
 	#endif
 
-	#ifdef PortalStatic
+	#ifdef PortalStatic_IRIS
 		float staticSum = 0;
 	#endif
 
@@ -107,14 +107,14 @@ void main() {
 			sum += texture2D(colortex0, cordC).xyz * BloomSize_F;
 	#endif
 
-	#ifdef PortalStatic
+	#ifdef PortalStatic_IRIS
 			staticSum += texture2D(colortex7, cordA).b;
 			staticSum += texture2D(colortex7, cordB).b;
 			staticSum += texture2D(colortex7, cordC).b;
 	#endif
 		}
 
-	#ifdef PortalStatic
+	#ifdef PortalStatic_IRIS
 		staticSum = min(staticSum / 6.0, 1.0);
 	#endif
 
@@ -200,7 +200,7 @@ void main() {
 #endif
 
 	// Static and tearing
-#ifdef PortalStatic
+#ifdef PortalStatic_IRIS
 	float _static = max(Static_F + staticSum, Static_F);
 #else
 	float _static = Static_F;

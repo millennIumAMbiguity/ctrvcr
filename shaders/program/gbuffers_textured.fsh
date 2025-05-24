@@ -66,10 +66,11 @@ vec2 offsetCoord(vec2 coord, vec2 offset, vec2 size) {
     return newCoord;
 }
 
+#ifdef NOT_VanillaLight_IRIS
 vec3 CalculateLightStrengthAndColor(float x)
 {
     #if MoonlightStrength == -1
-        float sunLightStrength = coord1.y;
+        float sunLightStrength = min(sin(x * PI2) * 2 + 0.2, 1.) * coord1.y;
     #else
         float sunLightStrength = clamp(sin(x * PI2) * 2 + 0.2, MoonlightStrength_F, 1.) * coord1.y;
     #endif
@@ -85,6 +86,12 @@ vec3 CalculateLightStrengthAndColor(float x)
     // 33% bleed between block and sky light, 67% of the stronger light.
     return (blockLight + skyLight) * .33 + max(blockLight, skyLight) * 0.67;
 }
+#else
+vec3 CalculateLightStrengthAndColor(float x)
+{
+    return texture2D(lightmap, coord1).rgb;
+}
+#endif
 
 void main()
 {
@@ -94,11 +101,11 @@ void main()
     float time8 = mod(frameTimeCounter * 7.987, 8192);
 #if LightmapDitering != -1
     if (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID) {
-        light = (1.-blindness) * max(light + (LightmapDitering_F * Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) / 16.0), 0.0);
+        light = (1. - blindness) * max(light + (LightmapDitering_F * Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) / 16.0), 0.0);
     } else
 #endif
     {
-        light *= (1.-blindness);
+        light *= 1. - blindness;
     }
 
     // Apply darkness and lighting strength.
@@ -191,9 +198,9 @@ void main()
 
     //Output the result.
 
-#ifdef PortalStatic
+#ifdef PortalStatic_IRIS
 	float e = mcEntity.x;
-    #ifdef PortalParticles
+    #ifdef PortalParticles_IRIS
 	    if (renderStage == MC_RENDER_STAGE_PARTICLES && MYMatch(color.rgb)) {e = 2;}
     #endif
 

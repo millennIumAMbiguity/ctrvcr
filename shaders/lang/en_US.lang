@@ -14,6 +14,7 @@ screen.AIWS=§kAIWS
 
 option.PortalStatic=Portal Static
 option.PortalParticles=Portal Particles
+option.VanillaLight=Custom Lightning
 option.ScreenTearSolid=Screen Tear Solid
 option.DarkEdges=Dark Edges
 option.BlurSize=Blur Size
@@ -63,9 +64,10 @@ value.ScanlineIntensity.-1=§cOff
 value.BNW.-1=§cOff
 value.GrainIntesity.-1=§cOff
 value.LightmapDitering.-1=§cOff
+value.MoonlightStrength.-1=§cOff
 
 value.LightingStrength.-1=1.0x
-value.DarknessIntensity.-1=1.0x
+value.DarknessIntensity.-1=100%
 
 value.AIWS.0=§cDisabled
 value.AIWS.1=Enabled
@@ -110,4 +112,5 @@ suffix.ScanlinePixelSize= px
 option.DarkEdges.comment=Percent of screen width the effect is offset per side.
 option.PortalStatic.comment=Makes nether portals and portal particles render as static.
 option.StaticTearChance.comment=Chance that static tears / horizontal lines of static appears.
+option.VanillaLight.comment=When true, use vanilla skylight, blocklight, and colors.
 option.AIWS.comment=Sets what AIWS (Alice in wonderland syndrome) runs on.
