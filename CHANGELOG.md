@@ -1,3 +1,13 @@
+## 1.2.2
+### Additions
+- Added config `Vanilla Light`
+### Changes
+- `Ditter Fog` is now disabled by default.
+- `Portal Static`, `Portal Static Particles`, and `Vanilla Light` are now disabled when using Optifine.
+### Fixes
+- Fixed bug when `Moonlight Strength` was disabled.
+- Fixes several issues that occurred when using Optifine.
+
 ## 1.2.1
 ### Fixes
  - Fixed error for AMD GPUs
@@ -7,7 +17,7 @@
 - Added profiles.
 - Added sunrise tint config.
 - Added option to perform BNW before tint.
-- Added config for moon light brightness.
+- Added config for moonlight brightness.
 ### Changes
 - Changed SCREEN_TEAR_SOLID default to false.
 - Changed AIWS default to Disabled.
