@@ -19,13 +19,13 @@ uniform float rainStrength;
 
 uniform int renderStage;
 
-#if AIWS_Source == 0 || AIWS_Source == 3
+#if AIWS_SOURCE == 0 || AIWS_SOURCE == 3
 uniform float frameTimeCounter;
 #endif
 
 varying vec3 mcEntityPos;
-#if AIWS_Source == 2
-#elif AIWS_Source > 0
+#if AIWS_SOURCE == 2
+#elif AIWS_SOURCE > 0
 uniform vec3 cameraPosition;
 #endif
 
@@ -35,7 +35,7 @@ varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
-#if LightmapDitering != -1 || defined(DitterFog)
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
 varying vec3 worldPos;
 #endif
 
@@ -66,22 +66,22 @@ vec2 offsetCoord(vec2 coord, vec2 offset, vec2 size) {
     return newCoord;
 }
 
-#ifdef NOT_VanillaLight_IRIS
+#ifdef NOT_VANILLA_LIGHT_IRIS
 vec3 CalculateLightStrengthAndColor(float x)
 {
-    #if MoonlightStrength == -1
+    #if MOONLIGHT_STRENGHT == -1
         float sunLightStrength = min(sin(x * PI2) * 2 + 0.2, 1.) * coord1.y;
     #else
-        float sunLightStrength = clamp(sin(x * PI2) * 2 + 0.2, MoonlightStrength_F, 1.) * coord1.y;
+        float sunLightStrength = clamp(sin(x * PI2) * 2 + 0.2, MOONLIGHT_STRENGHT_F, 1.) * coord1.y;
     #endif
 
     float sunrise = sunLightStrength * (max(cos(x * PI2 + 0.1) * 2 - 1, 0) + max(cos(x * PI2 + 0.1 + PI) * 2 - 1, 0));
 
-    vec3 sunLight = sunLightStrength * vec3(ColorLightSkyR_F, ColorLightSkyG_F, ColorLightSkyB_F);
-    vec3 sunsetLight = sunrise * vec3(ColorLightSunriseR_F, ColorLightSunriseG_F, ColorLightSunriseB_F);
+    vec3 sunLight = sunLightStrength * vec3(COLOR_LIGHT_SKY_R_F, COLOR_LIGHT_SKY_G_F, COLOR_LIGHT_SKY_B_F);
+    vec3 sunsetLight = sunrise * vec3(COLOR_LIGHT_SUNRISE_R_F, COLOR_LIGHT_SUNRISE_G_F, COLOR_LIGHT_SUNRISE_B_F);
     vec3 skyLight = max(sunLight, sunsetLight) * (1. - rainStrength / 2.);
 
-    vec3 blockLight = coord1.x * vec3(ColorLightBlockR_F, ColorLightBlockG_F, ColorLightBlockB_F);
+    vec3 blockLight = coord1.x * vec3(COLOR_LIGHT_BLOCK_R_F, COLOR_LIGHT_BLOCK_G_F, COLOR_LIGHT_BLOCK_B_F);
 
     // 33% bleed between block and sky light, 67% of the stronger light.
     return (blockLight + skyLight) * .33 + max(blockLight, skyLight) * 0.67;
@@ -99,9 +99,9 @@ void main()
     vec3 light = CalculateLightStrengthAndColor(sunAngle);
 
     float time8 = mod(frameTimeCounter * 7.987, 8192);
-#if LightmapDitering != -1
+#if LIGHTMAP_DITERING != -1
     if (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID) {
-        light = (1. - blindness) * max(light + (LightmapDitering_F * Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) / 16.0), 0.0);
+        light = (1. - blindness) * max(light + (LIGHTMAP_DITERING_F * Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) / 16.0), 0.0);
     } else
 #endif
     {
@@ -109,12 +109,12 @@ void main()
     }
 
     // Apply darkness and lighting strength.
-#if DarknessIntensity >= 0
-    light = pow(light, vec3(DarknessIntensity_F));
+#if DARKNESS_INTENSITY >= 0
+    light = pow(light, vec3(DARKNESS_INTENSITY_F));
 #endif
 
-#if LightingStrength != -1
-    light *= LightingStrength_F;
+#if LIGHTNING_STRENGTH != -1
+    light *= LIGHTNING_STRENGTH_F;
 #endif
 
     vec4 col;
@@ -130,39 +130,39 @@ void main()
         vec2 textureSize = vec2(textureSize(texture,0));
         vec2 of = floor(coord0 * textureSize);
 
-        #if AIWS_Source == 0 // time
+        #if AIWS_SOURCE == 0 // time
             vec2 source = vec2(frameTimeCounter, frameTimeCounter);
             source += vec2(1020, 1020);
-        #elif AIWS_Source == 1 // position
+        #elif AIWS_SOURCE == 1 // position
             vec2 source = vec2(cameraPosition.x + cameraPosition.z, cameraPosition.y + cameraPosition.z);
-        #elif AIWS_Source == 2 // pos rot
+        #elif AIWS_SOURCE == 2 // pos rot
             vec2 source = vec2(mcEntityPos.x + mcEntityPos.z, mcEntityPos.y + mcEntityPos.z);
         #else
             vec2 source = vec2(cameraPosition.x + cameraPosition.z + frameTimeCounter, cameraPosition.y + cameraPosition.z + frameTimeCounter);
         #endif
-        source *= AIWS_Speed_F;
+        source *= AIWS_SPEED_F;
 
-        #if AIWS_Type == 0
+        #if AIWS_TYPE == 0
             float v = hash(of, sin(source.x + coord0.x*100));
             float v2 = hash(of, cos(source.y + coord0.y*100 - 1000));
-        #elif AIWS_Type == 1
+        #elif AIWS_TYPE == 1
             float v = hash(of, mod(source.x + coord0.x*100, 8192)) - 0.5f;
             float v2 = hash(of, mod(source.y + coord0.y*100 - 1000, 8192)) - 0.5f;
-        #elif AIWS_Type == 2
+        #elif AIWS_TYPE == 2
             float v = hash(of, tan(source.x + coord0.x*100 - 1000 + sin(source.x + coord0.y*coord0.x*100)));
             float v2 = hash(of, tan(source.y + coord0.y*100 + sin(source.y + coord0.y*coord0.x*80 - 1000)));
-        #elif AIWS_Type == 3
-            float v = hash(of, coord0.x * AIWS_Speed_F);
-            float v2 = hash(of, coord0.y * AIWS_Speed_F);
-        #elif AIWS_Type == 4
+        #elif AIWS_TYPE == 3
+            float v = hash(of, coord0.x * AIWS_SPEED_F);
+            float v2 = hash(of, coord0.y * AIWS_SPEED_F);
+        #elif AIWS_TYPE == 4
             float v = hash(of, source.x);
             float v2 = hash(of, source.y);
-        #elif AIWS_Type == 5
+        #elif AIWS_TYPE == 5
             float v = Random_float_t(of, 1f + mod(floor(source.x * 16f), 512));
             float v2 = Random_float_t(of, 1f + mod(floor(source.y * 16f), 512));
         #endif
 
-        c0 = offsetCoord(coord0, vec2(v, v2) * AIWS_Intensity_F, textureSize);
+        c0 = offsetCoord(coord0, vec2(v, v2) * AIWS_INTENSITY_F, textureSize);
     }
     #if AIWS == 2
     else 
@@ -182,7 +182,7 @@ void main()
     col.rgb = mix(col.rgb,entityColor.rgb,entityColor.a);
 
     //Calculate fog intensity in or out of water.
-#ifdef DitterFog
+#ifdef DITTER_FOG
     if (isEyeInWater>0) {
         col.rgb = mix(col.rgb, gl_Fog.color.rgb, 1.-exp(-gl_FogFragCoord * gl_Fog.density));
     }
@@ -198,9 +198,9 @@ void main()
 
     //Output the result.
 
-#ifdef PortalStatic_IRIS
+#ifdef PORTAL_STATIC_IRIS
 	float e = mcEntity.x;
-    #ifdef PortalParticles_IRIS
+    #ifdef PORTAL_STATIC_PARTICLES_IRIS
 	    if (renderStage == MC_RENDER_STAGE_PARTICLES && MYMatch(color.rgb)) {e = 2;}
     #endif
 

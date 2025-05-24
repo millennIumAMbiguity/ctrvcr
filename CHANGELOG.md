@@ -9,23 +9,23 @@
 - Added option to perform BNW before tint.
 - Added config for moon light brightness.
 ### Changes
-- Changed ScreenTearSolid default to false.
+- Changed SCREEN_TEAR_SOLID default to false.
 - Changed AIWS default to Disabled.
 - Several changes to configs.
 ### Fixes
 - Fixed issues with lightning.
-- Fixed bug where DarknessIntensity did not work when under 1.0x.
+- Fixed bug where DARKNESS_INTENSITY did not work when under 1.0x.
 
 ## 1.1.9
 ### Additions
-- Added LightmapDitering.
-- Added LightingStrength.
-- Added DarknessIntensity.
-- Added DitterFog.
+- Added LIGHTMAP_DITERING.
+- Added LIGHTNING_STRENGTH.
+- Added DARKNESS_INTENSITY.
+- Added DITTER_FOG.
 - Added AIWS mode Fluids.
 ### Changes
-- Changed default AIWS_Intensity from 1.0 to 0.5
-- Changed default BloomSize from 0.8 to 0.9
+- Changed default AIWS_INTENSITY from 1.0 to 0.5
+- Changed default BLOOM_SIZE from 0.8 to 0.9
 - Set AIWS default to Fluids.
 
 ## 1.1.8
@@ -37,7 +37,7 @@
 ### Additions
 - Added AIWS texture distortion. (Disabled by default.)
 ### Fixes
-- Fixed bug when BlurSize and BloomSize were off.
+- Fixed bug when BLUR_SIZE and BLOOM_SIZE were off.
 
 ## 1.1.6
 ### Changes
@@ -77,7 +77,7 @@
 - Added scan-lines.
 - Added Slider for scan-lines.
 ### Changes
-- Changed config "DarkEdges" from a toggle to a slider.
+- Changed config "DARK_EDGES" from a toggle to a slider.
 - Changed glsl version to 130.
 ### Fixes
 - Fixed bug that causes static tear not to work as intended.

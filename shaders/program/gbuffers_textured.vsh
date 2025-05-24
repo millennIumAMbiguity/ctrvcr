@@ -14,11 +14,11 @@ varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
-#if LightmapDitering != -1 || defined(DitterFog)
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
 varying vec3 worldPos;
 #endif
 
-#if AIWS_Source == 2
+#if AIWS_SOURCE == 2
 varying vec3 mcEntityPos;
 #endif
 
@@ -27,12 +27,12 @@ void main()
 	mcEntity = mc_Entity;
     //Calculate world space position.
     vec3 pos = (gl_ModelViewMatrix * gl_Vertex).xyz;
-#if AIWS_Source == 2
+#if AIWS_SOURCE == 2
     mcEntityPos = pos;
 #endif
     pos = (gbufferModelViewInverse * vec4(pos,1)).xyz;
 
-#if LightmapDitering != -1 || defined(DitterFog)
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
     worldPos = getWorldPosition();
 #endif
 
