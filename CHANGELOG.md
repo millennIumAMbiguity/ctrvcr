@@ -1,3 +1,7 @@
+## 1.2.3
+### Fixes
+ - Fixed bug related to frameTimeCounter.
+
 ## 1.2.2
 ### Additions
 - Added config `Vanilla Light`

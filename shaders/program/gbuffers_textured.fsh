@@ -19,7 +19,7 @@ uniform float rainStrength;
 
 uniform int renderStage;
 
-#if AIWS_SOURCE == 0 || AIWS_SOURCE == 3
+#if AIWS_SOURCE == 0 || AIWS_SOURCE == 3 || LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
 uniform float frameTimeCounter;
 #endif
 
@@ -98,7 +98,9 @@ void main()
     //Combine lightmap with blindness.
     vec3 light = CalculateLightStrengthAndColor(sunAngle);
 
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
     float time8 = mod(frameTimeCounter * 7.987, 8192);
+#endif
 #if LIGHTMAP_DITERING != -1
     if (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID) {
         light = (1. - blindness) * max(light + (LIGHTMAP_DITERING_F * Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) / 16.0), 0.0);
