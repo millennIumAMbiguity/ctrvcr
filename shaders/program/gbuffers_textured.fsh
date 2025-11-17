@@ -35,8 +35,20 @@ varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
-#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS)
 varying vec3 worldPos;
+#endif
+
+#ifdef DH_WATER
+    uniform sampler2D depthtex0;
+    uniform float viewWidth;
+    uniform float viewHeight;
+#endif
+
+#ifdef DISTANT_HORIZONS
+    uniform float far;
+    uniform float dhNearPlane;
+    uniform float dhFarPlane;
 #endif
 
 bool MYMatch (vec3 rgb) {
@@ -95,15 +107,39 @@ vec3 CalculateLightStrengthAndColor(float x)
 
 void main()
 {
+    #ifdef DH_WATER
+        vec2 depthCoord = gl_FragCoord.xy / vec2(viewWidth, viewHeight);
+        float depth = texture2D(depthtex0, depthCoord).r;
+        if (depth != 1.0) discard;
+    #endif
+
     //Combine lightmap with blindness.
     vec3 light = CalculateLightStrengthAndColor(sunAngle);
 
 #if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
     float time8 = mod(frameTimeCounter * 7.987, 8192);
+    float time8_rf = Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z);
 #endif
+
+#ifdef DISTANT_HORIZONS
+    float linearDepth = length(worldPos);
+
+    #ifdef DITTER_FOG
+        #ifdef DH
+            if (time8_rf >= (linearDepth - (far - dhNearPlane))/(far*0.1) + 2.) {
+                discard;
+            }
+        #else
+            if (time8_rf < (linearDepth - (far - dhNearPlane))/(far*0.1)) {
+                discard;
+            }
+        #endif
+    #endif
+#endif
+
 #if LIGHTMAP_DITERING != -1
     if (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID) {
-        light = (1. - blindness) * max(light + (LIGHTMAP_DITERING_F * Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) / 16.0), 0.0);
+        light = (1. - blindness) * max(light + (LIGHTMAP_DITERING_F * time8_rf / 16.0), 0.0);
     } else
 #endif
     {
@@ -180,23 +216,62 @@ void main()
     col = color * vec4(light,1) * texture2D(texture,coord0);
 #endif
 
+#if !defined(TERRAIN)
+    if (col.a >= 0.999) {
+        gl_FragData[0] = col;
+        return;
+    }
+#endif
+
     //Apply entity flashes.
     col.rgb = mix(col.rgb,entityColor.rgb,entityColor.a);
 
     //Calculate fog intensity in or out of water.
+
+
+#ifdef DISTANT_HORIZONS
+    float fog_l = linearDepth;
+    float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
+    float fog_start = dhFarPlane - fog_l;
+
+    #ifdef DITTER_FOG
+        float fog_s = (10 * FOG_MULT_F)/dhFarPlane;
+    #else
+        float fog_s = (5 * FOG_MULT_F)/dhFarPlane;
+        fog_start = far/2.;
+    #endif
+#else
+    float fog_l = gl_FogFragCoord;
+    float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
+    float fog_s = max(gl_Fog.scale, 0.005 * FOG_MULT_F);
+    float fog_start = gl_Fog.start;
+#endif
+
+
 #ifdef DITTER_FOG
     if (isEyeInWater>0) {
-        col.rgb = mix(col.rgb, gl_Fog.color.rgb, 1.-exp(-gl_FogFragCoord * gl_Fog.density));
+        col.rgb = mix(col.rgb, gl_Fog.color.rgb, 1.-exp(-fog_l * fog_d));
     }
-    else if (Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z) < clamp((gl_FogFragCoord-gl_Fog.start) * gl_Fog.scale, 0., 1.)) {
-        discard;
+    else
+    {
+        if (time8_rf < clamp((fog_l-fog_start) * fog_s, 0., 1.)) {
+            discard;
+        }
+        #ifdef DISTANT_HORIZONS
+        else {
+            fog_s = (5 * FOG_MULT_F)/dhFarPlane;
+            fog_start = far/2.;
+            col.rgb = mix(col.rgb, gl_Fog.color.rgb, clamp((fog_l-fog_start) * fog_s, 0., 1.));
+        }
+        #endif
     }
 #else
-    float fog = (isEyeInWater>0) ? 1.-exp(-gl_FogFragCoord * gl_Fog.density):
-    clamp((gl_FogFragCoord-gl_Fog.start) * gl_Fog.scale, 0., 1.);
+    float fog = (isEyeInWater>0) ? 1.-exp(-fog_l * fog_d):
+    clamp((fog_l-fog_start) * fog_s, 0., 1.);
 
     col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
 #endif
+
 
     //Output the result.
 

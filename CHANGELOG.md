@@ -1,10 +1,20 @@
+## 1.3.0
+### Additions
+ - Added Distant Horizons support.
+ - Added config `Discard Sky`.
+ - Added config `Fog Mult`.
+### Changes
+ - Changed rendering for non-terrain things like block outline, sky, and fog.
+### Fixes
+ - Fixed typo in config value.
+
 ## 1.2.3
 ### Fixes
  - Fixed bug related to frameTimeCounter.
 
 ## 1.2.2
 ### Additions
-- Added config `Vanilla Light`
+- Added config `Vanilla Light`-
 ### Changes
 - `Ditter Fog` is now disabled by default.
 - `Portal Static`, `Portal Static Particles`, and `Vanilla Light` are now disabled when using Optifine.
@@ -14,7 +24,7 @@
 
 ## 1.2.1
 ### Fixes
- - Fixed error for AMD GPUs
+ - Fixed error for AMD GPUs.
 
 ## 1.2.0
 ### Additions

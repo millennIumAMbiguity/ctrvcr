@@ -13,6 +13,10 @@ varying vec2 coord0;
 
 void main()
 {
+    #ifdef DISTANT_HORIZONS
+        discard;
+    #endif
+
     //Visibility amount.
     vec3 light = vec3(1.-blindness);
     //Sample texture times Visibility.

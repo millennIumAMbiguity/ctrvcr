@@ -54,6 +54,7 @@ option.TINT_BLUE=§bBlue
 option.TINT_GREEN=§aGreen
 option.TINT_RED=§cRed
 option.VANILLA_LIGHT=Vanilla Light
+option.DISCARD_SKY=Discard Sky
 
 value.DARK_EDGES.-1=§cOff
 value.BLUR_SIZE.-1=§cOff
@@ -70,7 +71,7 @@ value.GRAIN_INTESITY.-1=§cOff
 value.LIGHTMAP_DITERING.-1=§cOff
 value.MOONLIGHT_STRENGHT.-1=§cOff
 
-value.LIGHTNING_STRENGTH.-1=1.0x
+value.LIGHTNING_STRENGTH.-1=100%
 value.DARKNESS_INTENSITY.-1=100%
 
 value.AIWS.0=§cDisabled

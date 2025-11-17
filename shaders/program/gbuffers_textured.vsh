@@ -14,7 +14,7 @@ varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
-#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS)
 varying vec3 worldPos;
 #endif
 
@@ -32,7 +32,7 @@ void main()
 #endif
     pos = (gbufferModelViewInverse * vec4(pos,1)).xyz;
 
-#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS)
     worldPos = getWorldPosition();
 #endif
 
