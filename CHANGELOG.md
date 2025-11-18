@@ -1,3 +1,11 @@
+## 1.3.1
+### Additions
+ - Added `Dynamic Lighting`.
+ - Added `Dynamic Light RGB configs.
+### Fixes
+ - Added missing texts.
+ - Fixed speling issue with som vars.
+
 ## 1.3.0
 ### Additions
  - Added Distant Horizons support.

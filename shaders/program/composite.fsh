@@ -4,7 +4,7 @@
 uniform sampler2D colortex0;
 uniform sampler2D colortex7;
 uniform float frameTimeCounter;
-uniform int blockEntityId;
+//uniform int blockEntityId;
 uniform float viewWidth;
 uniform float viewHeight;
 varying vec2 texcoord_vs;
@@ -190,8 +190,8 @@ void main() {
 	sum[1] *= TINT_GREEN_F;
 	sum[2] *= TINT_BLUE_F;
 
-#if GRAIN_INTESITY != -1
-	sum += sum * (0.5f-v) * GRAIN_INTESITY_F;
+#if GRAIN_INTENSITY != -1
+	sum += sum * (0.5f-v) * GRAIN_INTENSITY_F;
 #endif
 
 #if !defined(BNW_PRE_TINT) && BNW != -1

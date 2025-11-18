@@ -51,6 +51,10 @@ varying vec3 worldPos;
     uniform float dhFarPlane;
 #endif
 
+#ifdef HAND_DYNAMIC_LIGHTING
+   uniform int heldBlockLightValue;
+#endif
+
 bool MYMatch (vec3 rgb) {
     float r = rgb.r;
     float g = rgb.g;
@@ -116,14 +120,25 @@ void main()
     //Combine lightmap with blindness.
     vec3 light = CalculateLightStrengthAndColor(sunAngle);
 
+#if defined(DISTANT_HORIZONS) || defined(HAND_DYNAMIC_LIGHTING)
+    float linearDepth = length(worldPos);
+#endif
+
+#ifdef HAND_DYNAMIC_LIGHTING
+    {
+        float handlight = 1.05-clamp((linearDepth)/heldBlockLightValue, 0, 1.05);
+        handlight *= handlight * handlight; // handlight^4
+        vec3 handLightColor = vec3(COLOR_LIGHT_HAND_R_F, COLOR_LIGHT_HAND_G_F, COLOR_LIGHT_HAND_B_F) * handlight;
+        light = mix(handLightColor, light + handLightColor/10, light);
+    }
+#endif
+
 #if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
     float time8 = mod(frameTimeCounter * 7.987, 8192);
     float time8_rf = Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z);
 #endif
 
 #ifdef DISTANT_HORIZONS
-    float linearDepth = length(worldPos);
-
     #ifdef DITTER_FOG
         #ifdef DH
             if (time8_rf >= (linearDepth - (far - dhNearPlane))/(far*0.1) + 2.) {
