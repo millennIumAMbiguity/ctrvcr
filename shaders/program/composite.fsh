@@ -227,5 +227,18 @@ void main() {
 	sum *= min(a + v2*0.2, 1.0f);
 #endif
 
+#if COLOR_RESOLUTION != 10
+    sum = vec3(sum - fract(sum * COLOR_RESOLUTION) / COLOR_RESOLUTION);
+#endif
+
+#if SATURATION != 0
+    if (texcoord_vs.x < texcoord_vs.x*100 - DARK_EDGES && texcoord_vs.x < (1-texcoord_vs.x)*150- int(DARK_EDGES * 1.5))
+	{
+		float luma = dot(sum, vec3(0.3, 0.59, 0.11));
+    	vec3 chroma = (sum - luma) * SATURATION;
+    	sum = luma + chroma;
+	}
+#endif
+
 	gl_FragData[0] = vec4(sum, 1.0);
 }

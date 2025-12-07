@@ -5,6 +5,7 @@ profile.DEFAULT=§aDefault
 profile.OPTIFINE_COMPAT=Optifine Compatibility
 profile.STRONG=§eStrong
 profile.EXTREME=§e§lExtreme
+profile.EXTREMER=§6§lExtra-eme
 profile.AIWS=§kAIWS
 
 screen.PixelSize=Pixel Size
@@ -60,6 +61,28 @@ option.VANILLA_LIGHT=Vanilla Light
 option.DISCARD_SKY=Discard Sky
 option.FOG_MULT=Fog Multiplier
 option.HAND_DYNAMIC_LIGHTING=Dynamic Lighting
+
+option.VERT_ROUNDING_SIZE=Floating Point Precision
+option.COLOR_RESOLUTION=Color Resolution
+option.SATURATION=Saturation
+
+value.VERT_ROUNDING_SIZE.65=Off
+value.VERT_ROUNDING_SIZE.8=§c8
+value.VERT_ROUNDING_SIZE.4=§c4
+value.VERT_ROUNDING_SIZE.2=§c2
+value.VERT_ROUNDING_SIZE.1=§c1
+value.COLOR_RESOLUTION.10=Full
+value.COLOR_RESOLUTION.2=§c2
+value.COLOR_RESOLUTION.1.75=§c1.75
+value.COLOR_RESOLUTION.1.5=§c1.5
+value.COLOR_RESOLUTION.1.25=§c1.25
+value.COLOR_RESOLUTION.1=§c1
+value.SATURATION.0=1
+value.SATURATION.2=§c2
+value.SATURATION.3=§c3
+value.SATURATION.4=§c4
+value.SATURATION.5=§c5
+value.SATURATION.10=§c10
 
 value.DARK_EDGES.-1=§cOff
 value.BLUR_SIZE.-1=§cOff
