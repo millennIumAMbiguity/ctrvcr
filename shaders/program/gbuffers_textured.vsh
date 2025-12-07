@@ -42,7 +42,7 @@ void main()
     gl_Position = gl_ProjectionMatrix * gbufferModelView * vec4(pos,1);
     gl_FogFragCoord = length(pos);
 
-#if VERT_ROUNDING_SIZE != 65
+#if VERT_ROUNDING_SIZE != -1
     gl_Position.y *= (viewWidth / viewHeight);
     gl_Position.xy *= VERT_ROUNDING_SIZE;
     gl_Position.xy = floor(gl_Position.xy);

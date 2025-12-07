@@ -227,15 +227,15 @@ void main() {
 	sum *= min(a + v2*0.2, 1.0f);
 #endif
 
-#if COLOR_RESOLUTION != 10
-    sum = vec3(sum - fract(sum * COLOR_RESOLUTION) / COLOR_RESOLUTION);
+#if COLOR_RESOLUTION != 100
+    sum = vec3(sum - fract(sum * COLOR_RESOLUTION_F) / COLOR_RESOLUTION_F);
 #endif
 
-#if SATURATION != 0
+#if SATURATION != -1
     if (texcoord_vs.x < texcoord_vs.x*100 - DARK_EDGES && texcoord_vs.x < (1-texcoord_vs.x)*150- int(DARK_EDGES * 1.5))
 	{
 		float luma = dot(sum, vec3(0.3, 0.59, 0.11));
-    	vec3 chroma = (sum - luma) * SATURATION;
+    	vec3 chroma = (sum - luma) * SATURATION_F;
     	sum = luma + chroma;
 	}
 #endif
