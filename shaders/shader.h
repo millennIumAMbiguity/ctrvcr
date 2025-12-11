@@ -88,7 +88,7 @@ const float PI2 = 6.283185307179586476925286766559;
 const float SATURATION_F = float(SATURATION) / 10.0;
 #endif
 
-#if COLOR_RESOLUTION != 10
+#if COLOR_RESOLUTION != 100
 const float COLOR_RESOLUTION_F = float(COLOR_RESOLUTION) / 10.0;
 #endif
 
