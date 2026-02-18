@@ -55,6 +55,10 @@ varying vec3 worldPos;
    uniform int heldBlockLightValue;
 #endif
 
+#ifdef DITTER_FOG
+uniform float far;
+#endif
+
 bool MYMatch (vec3 rgb) {
     float r = rgb.r;
     float g = rgb.g;
@@ -268,7 +272,9 @@ void main()
     }
     else
     {
-        if (time8_rf < clamp((fog_l-fog_start) * fog_s, 0., 1.)) {
+        fog_start += 50 / (FOG_MULT_F + 1);
+        float mixValue = (fog_l - fog_start) / (far - fog_start);
+        if (time8_rf < mixValue) {
             discard;
         }
         #ifdef DISTANT_HORIZONS

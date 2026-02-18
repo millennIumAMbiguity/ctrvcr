@@ -18,7 +18,7 @@ void main()
     vec4 col = color;
 
     float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
-    float fog_s = max(gl_Fog.scale, 0.01 * FOG_MULT_F);
+    float fog_s = max(gl_Fog.scale, 0.005 * FOG_MULT_F);
 
     //Calculate fog intensity in or out of water.
     float fog = (isEyeInWater>0) ? 1.-exp(-gl_FogFragCoord * fog_d):
