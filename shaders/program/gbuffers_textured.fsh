@@ -85,16 +85,15 @@ vec2 offsetCoord(vec2 coord, vec2 offset, vec2 size) {
 #ifdef NOT_VANILLA_LIGHT_IRIS
 vec3 CalculateLightStrengthAndColor(float x)
 {
-    #if MOONLIGHT_STRENGHT == -1
-        float sunLightStrength = min(sin(x * PI2) * 2 + 0.2, 1.) * coord1.y;
-    #else
-        float sunLightStrength = clamp(sin(x * PI2) * 2 + 0.2, MOONLIGHT_STRENGHT_F, 1.) * coord1.y;
-    #endif
-
+    float sunLightStrength = clamp(sin(x * PI2) * 2 + 0.2, 0, 1) * coord1.y;
     float sunrise = sunLightStrength * (max(cos(x * PI2 + 0.1) * 2 - 1, 0) + max(cos(x * PI2 + 0.1 + PI) * 2 - 1, 0));
 
     vec3 sunLight = sunLightStrength * vec3(COLOR_LIGHT_SKY_R_F, COLOR_LIGHT_SKY_G_F, COLOR_LIGHT_SKY_B_F);
     vec3 sunsetLight = sunrise * vec3(COLOR_LIGHT_SUNRISE_R_F, COLOR_LIGHT_SUNRISE_G_F, COLOR_LIGHT_SUNRISE_B_F);
+#if MOONLIGHT_STRENGHT != -1
+        vec3 monLight = coord1.y * MOONLIGHT_STRENGHT_F * vec3(COLOR_LIGHT_SKY_NIGHT_R_F, COLOR_LIGHT_SKY_NIGHT_G_F, COLOR_LIGHT_SKY_NIGHT_B_F);
+        sunLight = max(sunLight, monLight * (1-sunLightStrength));
+#endif
     vec3 skyLight = max(sunLight, sunsetLight) * (1. - rainStrength / 2.);
 
     vec3 blockLight = coord1.x * vec3(COLOR_LIGHT_BLOCK_R_F, COLOR_LIGHT_BLOCK_G_F, COLOR_LIGHT_BLOCK_B_F);
