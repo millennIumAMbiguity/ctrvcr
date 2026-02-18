@@ -6,6 +6,8 @@ attribute vec2 mc_Entity;
 //Model * view matrix and it's inverse.
 uniform mat4 gbufferModelView;
 uniform mat4 gbufferModelViewInverse;
+uniform float viewWidth;
+uniform float viewHeight;
 
 #include "/common/getWorldPosition.vsh"
 
@@ -39,6 +41,14 @@ void main()
     //Output position and fog to fragment shader.
     gl_Position = gl_ProjectionMatrix * gbufferModelView * vec4(pos,1);
     gl_FogFragCoord = length(pos);
+
+#if VERT_ROUNDING_SIZE != -1
+    gl_Position.y *= (viewWidth / viewHeight);
+    gl_Position.xy *= VERT_ROUNDING_SIZE;
+    gl_Position.xy = floor(gl_Position.xy);
+    gl_Position.xy /= VERT_ROUNDING_SIZE;
+    gl_Position.y *= (viewHeight / viewWidth);
+#endif
 
     //Calculate view space normal.
     vec3 normal = gl_NormalMatrix * gl_Normal;
