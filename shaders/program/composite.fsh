@@ -13,6 +13,42 @@ varying vec2 texcoord_vs;
 #ifdef BNW_PRE_TINT
 #endif
 
+#if COLOR_DITERING == 1
+	float ditter(vec2 p) // bayer2x2
+	{
+		ivec2 ip = ivec2(mod(p * vec2(viewWidth, viewHeight) / RENDER_PIXEL_SIZE, 2.0));
+
+		// 2x2 Bayer matrix values (0..3), normalized to 0..1
+		int index = ip.x + ip.y * 2;
+		float bayer[4] = float[4](
+			0.0 / 4.0,
+			2.0 / 4.0,
+			3.0 / 4.0,
+			1.0 / 4.0
+		);
+
+		return bayer[index];
+	}
+#elif COLOR_DITERING == 2
+	float ditter(vec2 p) // bayer4x4
+	{
+		// Convert screen coordinates to 4x4 grid
+		ivec2 ip = ivec2(mod(p * vec2(viewWidth, viewHeight) / RENDER_PIXEL_SIZE, 4.0));
+
+		// 4x4 Bayer matrix (normalized 0..1)
+		// This is the classic ordered dithering pattern, slightly remapped to 0..1
+		float bayer[16] = float[16](
+			0.0 / 16.0,  8.0 / 16.0,  2.0 / 16.0, 10.0 / 16.0,
+		12.0 / 16.0,  4.0 / 16.0, 14.0 / 16.0,  6.0 / 16.0,
+			3.0 / 16.0, 11.0 / 16.0,  1.0 / 16.0,  9.0 / 16.0,
+		15.0 / 16.0,  7.0 / 16.0, 13.0 / 16.0,  5.0 / 16.0
+		);
+
+		int index = ip.x + ip.y * 4;
+		return bayer[index];
+	}
+#endif
+
 void main() {
 
 	float time = mod(frameTimeCounter, 8192);
@@ -217,27 +253,52 @@ void main() {
 		sum = (sum + vec3(sv)) * (1-_static) + vec3(v * _static);
 	}
 
+#if SATURATION != -1
+    float luma = dot(sum, vec3(0.299, 0.587, 0.114));
+	vec3 chroma = (sum - luma) * SATURATION_F;
+	sum = luma + chroma;
+#endif
+
+#if COLOR_RESOLUTION == 1
+    // 1bit color (black or white)
+
+	// Convert to luminance
+    float lum = dot(sum, vec3(0.299, 0.587, 0.114)) * 1.01 - 0.1;
+
+    // Ordered dithering threshold
+	#if COLOR_DITERING == -1
+		float threshold = 0.5;
+	#else
+    	float threshold = ditter(texcoord);
+	#endif
+
+    // 1-bit output
+    sum = vec3(lum > threshold ? 1.0 : 0.0);
+
+	//sum = vec3(floor(sum.r + sum.g + sum.b - 1));
+#elif COLOR_RESOLUTION != 256
+	#if COLOR_DITERING == -1
+		sum = floor(sum * COLOR_RESOLUTION) / (COLOR_RESOLUTION - 1);
+	#else
+		float dit = ditter(texcoord) - 0.5;
+		#if COLOR_RESOLUTION <= 4
+			// for very low color resolutions with ditering, bright up the dark colors a bit.
+    		sum = floor((sum*0.9 + 0.1) * COLOR_RESOLUTION + dit) / (COLOR_RESOLUTION - 1);
+		#else
+			sum = floor(sum * COLOR_RESOLUTION + dit) / (COLOR_RESOLUTION - 1);
+		#endif
+	#endif
+#endif
+
 #if DARK_EDGES >= 0
 	// Edges
 	float a = texcoord_vs.x*100-DARK_EDGES;
 	// Left edge
+	sum = max(sum, 0);
 	sum *= min(a*3 + v*0.2, 2.0f) - min(a*a + v2*0.2, 1.0f);
 	a = (1-texcoord_vs.x)*150- int(DARK_EDGES * 1.5);
 	// Right edge
 	sum *= min(a + v2*0.2, 1.0f);
-#endif
-
-#if COLOR_RESOLUTION != 100
-    sum = vec3(sum - fract(sum * COLOR_RESOLUTION_F) / COLOR_RESOLUTION_F);
-#endif
-
-#if SATURATION != -1
-    if (texcoord_vs.x < texcoord_vs.x*100 - DARK_EDGES && texcoord_vs.x < (1-texcoord_vs.x)*150- int(DARK_EDGES * 1.5))
-	{
-		float luma = dot(sum, vec3(0.3, 0.59, 0.11));
-    	vec3 chroma = (sum - luma) * SATURATION_F;
-    	sum = luma + chroma;
-	}
 #endif
 
 	gl_FragData[0] = vec4(sum, 1.0);

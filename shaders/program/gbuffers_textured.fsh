@@ -19,7 +19,7 @@ uniform float rainStrength;
 
 uniform int renderStage;
 
-#if AIWS_SOURCE == 0 || AIWS_SOURCE == 3 || LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
+#if AIWS_SOURCE == 0 || AIWS_SOURCE == 3 || LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(HAND_DYNAMIC_LIGHTING)
 uniform float frameTimeCounter;
 #endif
 
@@ -35,7 +35,7 @@ varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
-#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS)
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS) || defined(HAND_DYNAMIC_LIGHTING)
 varying vec3 worldPos;
 #endif
 

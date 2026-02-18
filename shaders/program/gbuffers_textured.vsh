@@ -16,7 +16,7 @@ varying vec4 color;
 varying vec2 coord0;
 varying vec2 coord1;
 varying vec2 mcEntity;
-#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS)
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS) || defined(HAND_DYNAMIC_LIGHTING)
 varying vec3 worldPos;
 #endif
 
@@ -34,7 +34,7 @@ void main()
 #endif
     pos = (gbufferModelViewInverse * vec4(pos,1)).xyz;
 
-#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS)
+#if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS) || defined(HAND_DYNAMIC_LIGHTING)
     worldPos = getWorldPosition();
 #endif
 
@@ -43,11 +43,10 @@ void main()
     gl_FogFragCoord = length(pos);
 
 #if VERT_ROUNDING_SIZE != -1
-    gl_Position.y *= (viewWidth / viewHeight);
-    gl_Position.xy *= VERT_ROUNDING_SIZE;
-    gl_Position.xy = floor(gl_Position.xy);
-    gl_Position.xy /= VERT_ROUNDING_SIZE;
-    gl_Position.y *= (viewHeight / viewWidth);
+    float aspect = viewWidth / viewHeight;
+    gl_Position.y *= aspect;
+    gl_Position.xy = floor(gl_Position.xy * VERT_ROUNDING_SIZE) / (VERT_ROUNDING_SIZE - 1);
+    gl_Position.y /= aspect;
 #endif
 
     //Calculate view space normal.
