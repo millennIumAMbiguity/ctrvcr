@@ -1,40 +1,40 @@
 ## 1.4.0
 ### Additions
- - Added night sky light color configs.
- - Added config to reduce colors.
- - Added 2 diterings for reduced color modes.
- - Added saturation config.
- - Added config for reducing floating point precision.
- - Added `Macintosh color classic` preset.
+- Added night sky light color configs.
+- Added config to reduce colors.
+- Added 2 ditherings for reduced color modes.
+- Added saturation config.
+- Added config for reducing floating point precision.
+- Added `Macintosh color classic` preset.
 ### Changes
- - Renamed `Sky` rbg colors to `Day`.
- - Renamed `Tint` to `Color`.
- - Updated presets.
+- Renamed `Sky` RGB colors to `Day`.
+- Renamed `Tint` to `Color`.
+- Updated presets.
 ### Fixes
- - Fixed shader crash when disabling ditter fog in some cases.
- - Minor fix/tweek to fog.
+- Fixed shader crash when disabling dither fog in some cases.
+- Minor fix/tweak to fog.
 
 ## 1.3.1
 ### Additions
- - Added `Dynamic Lighting`.
- - Added Dynamic Light RGB configs.
+- Added `Dynamic Lighting`.
+- Added Dynamic Light RGB configs.
 ### Fixes
- - Added missing texts.
- - Fixed speling issue with som vars.
+- Added missing texts.
+- Fixed speling issue with som vars.
 
 ## 1.3.0
 ### Additions
- - Added Distant Horizons support.
- - Added config `Discard Sky`.
- - Added config `Fog Mult`.
+- Added Distant Horizons support.
+- Added config `Discard Sky`.
+- Added config `Fog Mult`.
 ### Changes
- - Changed rendering for non-terrain things like block outline, sky, and fog.
+- Changed rendering for non-terrain things like block outline, sky, and fog.
 ### Fixes
- - Fixed typo in config value.
+- Fixed typo in config value.
 
 ## 1.2.3
 ### Fixes
- - Fixed bug related to frameTimeCounter.
+- Fixed bug related to frameTimeCounter.
 
 ## 1.2.2
 ### Additions
@@ -48,7 +48,7 @@
 
 ## 1.2.1
 ### Fixes
- - Fixed error for AMD GPUs.
+- Fixed error for AMD GPUs.
 
 ## 1.2.0
 ### Additions

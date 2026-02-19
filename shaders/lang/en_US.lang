@@ -40,7 +40,7 @@ option.COLOR_LIGHT_HAND_R=§cDynamic
 option.DARK_EDGES=Dark Edges
 option.DARKNESS_INTENSITY=Darkness Intensity
 option.DISTRORTION_FACTOR=Distortion Factor
-option.DITTER_FOG=Ditter Fog
+option.DITTER_FOG=Dither Fog
 option.FX_PIXEL_SIZE=FX Pixel Size
 option.GRAIN_INTENSITY=Grain Intesity
 option.LIGHTMAP_DITERING=Lightmap Ditering
@@ -64,9 +64,9 @@ option.VANILLA_LIGHT=Vanilla Light
 option.DISCARD_SKY=Discard Sky
 option.FOG_MULT=Fog Multiplier
 option.HAND_DYNAMIC_LIGHTING=Dynamic Lighting
-
 option.VERT_ROUNDING_SIZE=Floating Point Precision
 option.COLOR_RESOLUTION=Color Resolution
+option.COLOR_DITERING=Color dither method
 option.SATURATION=Saturation
 
 value.COLOR_RESOLUTION.256=§a24-bit color
