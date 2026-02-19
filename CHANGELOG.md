@@ -1,7 +1,23 @@
+## 1.4.0
+### Additions
+ - Added night sky light color configs.
+ - Added config to reduce colors.
+ - Added 2 diterings for reduced color modes.
+ - Added saturation config.
+ - Added config for reducing floating point precision.
+ - Added `Macintosh color classic` preset.
+### Changes
+ - Renamed `Sky` rbg colors to `Day`.
+ - Renamed `Tint` to `Color`.
+ - Updated presets.
+### Fixes
+ - Fixed shader crash when disabling ditter fog in some cases.
+ - Minor fix/tweek to fog.
+
 ## 1.3.1
 ### Additions
  - Added `Dynamic Lighting`.
- - Added `Dynamic Light RGB configs.
+ - Added Dynamic Light RGB configs.
 ### Fixes
  - Added missing texts.
  - Fixed speling issue with som vars.
