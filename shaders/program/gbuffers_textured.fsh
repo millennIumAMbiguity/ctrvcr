@@ -1,5 +1,6 @@
 #include "/shader.h"
 #include "/common/hash.glsl"
+#include "/common/fog.glsl"
 
 //Diffuse (color) texture.
 uniform sampler2D texture;
@@ -46,18 +47,15 @@ varying vec3 worldPos;
 #endif
 
 #ifdef DISTANT_HORIZONS
-    uniform float far;
     uniform float dhNearPlane;
     uniform float dhFarPlane;
 #endif
+uniform float far;
 
 #ifdef HAND_DYNAMIC_LIGHTING
    uniform int heldBlockLightValue;
 #endif
 
-#ifdef DITTER_FOG
-uniform float far;
-#endif
 
 bool MYMatch (vec3 rgb) {
     float r = rgb.r;
@@ -142,17 +140,7 @@ void main()
 #endif
 
 #ifdef DISTANT_HORIZONS
-    #ifdef DITTER_FOG
-        #ifdef DH
-            if (time8_rf >= (linearDepth - (far - dhNearPlane))/(far*0.1) + 2.) {
-                discard;
-            }
-        #else
-            if (time8_rf < (linearDepth - (far - dhNearPlane))/(far*0.1)) {
-                discard;
-            }
-        #endif
-    #endif
+    DhDitterFog(time8_rf, linearDepth, far);
 #endif
 
 #if LIGHTMAP_DITERING != -1
@@ -234,63 +222,24 @@ void main()
     col = color * vec4(light,1) * texture2D(texture,coord0);
 #endif
 
-#if !defined(TERRAIN)
-    if (col.a >= 0.999) {
-        gl_FragData[0] = col;
-        return;
-    }
-#endif
+//#if !defined(TERRAIN)
+//    if (col.a >= 0.999) {
+//        gl_FragData[0] = col;
+//        return;
+//    }
+//#endif
 
     //Apply entity flashes.
     col.rgb = mix(col.rgb,entityColor.rgb,entityColor.a);
 
-    //Calculate fog intensity in or out of water.
-
-
-#ifdef DISTANT_HORIZONS
-    float fog_l = linearDepth;
-    float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
-    float fog_start = dhFarPlane - fog_l;
-
-    #ifdef DITTER_FOG
-        float fog_s = (10 * FOG_MULT_F)/dhFarPlane;
+    // fog
+    #if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
+        float fog = Fog(isEyeInWater, time8_rf, far);
+        col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
     #else
-        float fog_s = (5 * FOG_MULT_F)/dhFarPlane;
-        fog_start = far/2.;
+        col.rgb = mix(col.rgb, gl_Fog.color.rgb, Fog(isEyeInWater, 0, far));
     #endif
-#else
-    float fog_l = gl_FogFragCoord;
-    float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
-    float fog_s = max(gl_Fog.scale, 0.005 * FOG_MULT_F);
-    float fog_start = gl_Fog.start;
-#endif
-
-
-#ifdef DITTER_FOG
-    if (isEyeInWater>0) {
-        col.rgb = mix(col.rgb, gl_Fog.color.rgb, 1.-exp(-fog_l * fog_d));
-    }
-    else
-    {
-        fog_start += 50 / (FOG_MULT_F + 1);
-        float mixValue = (fog_l - fog_start) / (far - fog_start);
-        if (time8_rf < mixValue) {
-            discard;
-        }
-        #ifdef DISTANT_HORIZONS
-        else {
-            fog_s = (5 * FOG_MULT_F)/dhFarPlane;
-            fog_start = far/2.;
-            col.rgb = mix(col.rgb, gl_Fog.color.rgb, clamp((fog_l-fog_start) * fog_s, 0., 1.));
-        }
-        #endif
-    }
-#else
-    float fog = (isEyeInWater>0) ? 1.-exp(-fog_l * fog_d):
-    clamp((fog_l-fog_start) * fog_s, 0., 1.);
-
-    col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
-#endif
+    
 
 
     //Output the result.

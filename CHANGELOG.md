@@ -1,3 +1,10 @@
+## 1.4.1
+### Changes
+- Updated fog
+### Fixes
+- Fixed mobs not affected by fog in some cases.
+- Fixed sky being black under water.
+
 ## 1.4.0
 ### Additions
 - Added night sky light color configs.

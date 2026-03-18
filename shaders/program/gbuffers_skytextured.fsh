@@ -16,7 +16,7 @@ void main()
     //Visibility amount.
     vec3 light = vec3(1.-blindness);
     //Sample texture times Visibility.
-    vec4 col = color * vec4(light,1) * texture2D(texture,coord0);
+    vec4 col = vec4(light,1) * texture2D(texture,coord0);
 
     //Output the result.
     gl_FragData[0] = col;

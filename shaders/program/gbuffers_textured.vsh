@@ -35,7 +35,7 @@ void main()
     pos = (gbufferModelViewInverse * vec4(pos,1)).xyz;
 
 #if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG) || defined(DISTANT_HORIZONS) || defined(HAND_DYNAMIC_LIGHTING)
-    worldPos = getWorldPosition();
+    worldPos = pos;
 #endif
 
     //Output position and fog to fragment shader.

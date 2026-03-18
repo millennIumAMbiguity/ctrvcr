@@ -1,9 +1,12 @@
 #include "/shader.h"
+#include "/common/fog.glsl"
 
 //0-1 amount of blindness.
 uniform float blindness;
 //0 = default, 1 = water, 2 = lava.
 uniform int isEyeInWater;
+
+uniform float far;
 
 //Vertex color.
 varying vec4 color;
@@ -17,16 +20,15 @@ void main()
 
     vec4 col = color;
 
-    float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
-    float fog_s = max(gl_Fog.scale, 0.005 * FOG_MULT_F);
+    #if defined(SKYBASIC)
+    if (col.r < 0.5)
+    #endif
+    // Apply the fog.
+    col.rgb = mix(col.rgb, gl_Fog.color.rgb,FogNDF(isEyeInWater, far));
 
-    //Calculate fog intensity in or out of water.
-    float fog = (isEyeInWater>0) ? 1.-exp(-gl_FogFragCoord * fog_d):
-    clamp((gl_FogFragCoord-gl_Fog.start) * fog_s, 0., 1.);
-
-    //Apply the fog.
-    col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
+    // Apply blindness
+    col.rgb *= vec3(1.-blindness);
 
     //Output the result.
-    gl_FragData[0] = col * vec4(vec3(1.-blindness),1);
+    gl_FragData[0] = col;
 }
