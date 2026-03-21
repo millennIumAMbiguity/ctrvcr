@@ -1,6 +1,6 @@
 #include "/shader.h"
 #include "/common/hash.glsl"
-#include "/common/fog.glsl"
+#include "/common/fog.fsh"
 
 //Diffuse (color) texture.
 uniform sampler2D texture;
@@ -45,12 +45,6 @@ varying vec3 worldPos;
     uniform float viewWidth;
     uniform float viewHeight;
 #endif
-
-#ifdef DISTANT_HORIZONS
-    uniform float dhNearPlane;
-    uniform float dhFarPlane;
-#endif
-uniform float far;
 
 #ifdef HAND_DYNAMIC_LIGHTING
    uniform int heldBlockLightValue;
@@ -137,10 +131,10 @@ void main()
 #if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
     float time8 = mod(frameTimeCounter * 7.987, 8192);
     float time8_rf = Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z);
-#endif
 
-#ifdef DISTANT_HORIZONS
-    DhDitterFog(time8_rf, linearDepth, far);
+    #ifdef DISTANT_HORIZONS
+        DhDitterFog(time8_rf, linearDepth);
+    #endif
 #endif
 
 #if LIGHTMAP_DITERING != -1
@@ -234,10 +228,22 @@ void main()
 
     // fog
     #if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
-        float fog = Fog(isEyeInWater, time8_rf, far);
+        #ifdef DISTANT_HORIZONS
+            float fog = Fog(isEyeInWater, time8_rf, linearDepth*2);
+        #else
+            float fog = Fog(isEyeInWater, time8_rf, gl_FogFragCoord);
+        #endif
+
         col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
     #else
-        col.rgb = mix(col.rgb, gl_Fog.color.rgb, Fog(isEyeInWater, 0, far));
+    
+        #ifdef DISTANT_HORIZONS
+            float fog = Fog(isEyeInWater, 0, linearDepth*2);
+        #else
+            float fog = Fog(isEyeInWater, 0, gl_FogFragCoord);
+        #endif
+
+        col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
     #endif
     
 

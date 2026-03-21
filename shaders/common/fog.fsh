@@ -1,4 +1,10 @@
 
+#ifdef DISTANT_HORIZONS
+    uniform float dhNearPlane;
+    uniform float dhFarPlane;
+#endif
+uniform float far;
+
 float OldFog(float isEyeInWater) {
     float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
     float fog_s = max(gl_Fog.scale, 0.005 * FOG_MULT_F);
@@ -21,16 +27,14 @@ float OldFogS(float isEyeInWater, float scale) {
     return fog;
 }
 
-float FogNDF(float isEyeInWater, float far) {
+float FogNDF(float isEyeInWater, float fog_l) {
     #ifdef DISTANT_HORIZONS
-        float fog_l = linearDepth;
-        float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
+        float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F);
         float fog_start = dhFarPlane - fog_l;
 
         float fog_s = (5 * FOG_MULT_F)/dhFarPlane;
         fog_start = far/2.;
     #else
-        float fog_l = gl_FogFragCoord;
         float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F) + 0.0000001;
         float fog_start = gl_Fog.start/5 + 10 * FOG_MULT_F;
     #endif
@@ -48,26 +52,25 @@ float FogNDF(float isEyeInWater, float far) {
     return fog;
 }
 
-float Fog(float isEyeInWater, float time8_rf, float far) {
+float Fog(float isEyeInWater, float time8_rf, float fog_l) {
     //#ifdef DITTER_FOG
     //#else
     //    return FogNDF(isEyeInWater);
     //#endif
 
+    float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F) + 0.0000001;
     #ifdef DISTANT_HORIZONS
-        float fog_l = linearDepth;
-        float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
-        float fog_start = dhFarPlane - fog_l;
+        float f = dhFarPlane;
 
         #ifdef DITTER_FOG
             float fog_s = (10 * FOG_MULT_F)/dhFarPlane;
+            float fog_start = dhFarPlane - fog_l;
         #else
             float fog_s = (5 * FOG_MULT_F)/dhFarPlane;
-            fog_start = far/2.;
+            float fog_start =  10 * FOG_MULT_F;
         #endif
     #else
-        float fog_l = gl_FogFragCoord;
-        float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F) + 0.0000001;
+        float f = far;
         float fog_start = gl_Fog.start/5 + 10 * FOG_MULT_F;
     #endif
 
@@ -78,7 +81,7 @@ float Fog(float isEyeInWater, float time8_rf, float far) {
     }
     else
     {
-        fog = clamp((fog_l - fog_start) / (far - fog_start) + fog_d*(1-1/fog_l), 0., 1.);
+        fog = clamp((fog_l - fog_start) / (f - fog_start) + fog_d*(1-1/fog_l), 0., 1.);
     }
 
     #ifdef DITTER_FOG

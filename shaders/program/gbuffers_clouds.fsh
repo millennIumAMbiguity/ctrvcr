@@ -1,5 +1,5 @@
 #include "/shader.h"
-#include "/common/fog.glsl"
+#include "/common/fog.fsh"
 
 //Diffuse (color) texture.
 uniform sampler2D texture;
@@ -8,8 +8,6 @@ uniform sampler2D texture;
 uniform float blindness;
 //0 = default, 1 = water, 2 = lava.
 uniform int isEyeInWater;
-
-uniform float far;
 
 //Vertex color.
 varying vec4 color;
@@ -28,7 +26,12 @@ void main()
     vec4 col = color * vec4(light,1) * texture2D(texture,coord0);
 
     // Apply the fog.
-    col.rgb = mix(col.rgb, gl_Fog.color.rgb, FogNDF(isEyeInWater, far*10));
+    #ifdef DISTANT_HORIZONS
+        float fog = FogNDF(isEyeInWater, gl_FogFragCoord / 10);
+    #else
+        float fog = FogNDF(isEyeInWater, gl_FogFragCoord / 10);
+    #endif
+    col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
 
     //Output the result.
     gl_FragData[0] = col;

@@ -1,12 +1,10 @@
 #include "/shader.h"
-#include "/common/fog.glsl"
+#include "/common/fog.fsh"
 
 //0-1 amount of blindness.
 uniform float blindness;
 //0 = default, 1 = water, 2 = lava.
 uniform int isEyeInWater;
-
-uniform float far;
 
 //Vertex color.
 varying vec4 color;
@@ -24,7 +22,14 @@ void main()
     if (col.r < 0.5)
     #endif
     // Apply the fog.
-    col.rgb = mix(col.rgb, gl_Fog.color.rgb,FogNDF(isEyeInWater, far));
+    {
+        #ifdef DISTANT_HORIZONS
+            float fog = FogNDF(isEyeInWater, gl_FogFragCoord);
+        #else
+            float fog = FogNDF(isEyeInWater, gl_FogFragCoord);
+        #endif
+        col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
+    }
 
     // Apply blindness
     col.rgb *= vec3(1.-blindness);
