@@ -73,7 +73,10 @@ vec2 offsetCoord(vec2 coord, vec2 offset, vec2 size) {
     vec2 newCoord = coord + offset;
 
     // Warp texture around if it goes out of bounds
-    newCoord -= (16 / size) * (floor(newCoord * size2) - floor(coord * size2));
+    #ifdef TERRAIN
+    if (mcEntity.x < -0.5 || mcEntity.x > 0.5)
+    #endif
+        newCoord -= (16 / size) * (floor(newCoord * size2) - floor(coord * size2));
 
     return newCoord;
 }
@@ -157,8 +160,7 @@ void main()
 
     vec4 col;
 
-#if AIWS > 0 && !defined(HAND)
-
+#if AIWS > 0 && !defined(HAND) && !defined(WEATHER)
     vec2 c0;
 
     #if AIWS == 2
@@ -210,10 +212,18 @@ void main()
     #endif
 
     //Sample texture times lighting.
-    col = color * vec4(light,1) * texture2D(texture,c0);
+    col = color * texture2D(texture,c0);
+    col.rgb *= light;
+
+    #ifdef TERRAIN
+    if (col.a < 0.6) {
+        discard;
+    }
+    #endif
 #else
     //Sample texture times lighting.
-    col = color * vec4(light,1) * texture2D(texture,coord0);
+    col = color * texture2D(texture,coord0);
+    col.rgb *= light;
 #endif
 
 //#if !defined(TERRAIN)
