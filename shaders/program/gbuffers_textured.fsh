@@ -157,7 +157,7 @@ void main()
 
     vec4 col;
 
-#if AIWS > 0
+#if AIWS > 0 && !defined(HAND)
 
     vec2 c0;
 
