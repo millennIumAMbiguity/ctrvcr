@@ -31,7 +31,7 @@ void main()
     #else
         float fog = FogNDF(isEyeInWater, gl_FogFragCoord / 10);
     #endif
-    col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
+    col.rgb = mix(col.rgb, FogCol(), fog);
 
     //Output the result.
     gl_FragData[0] = col;

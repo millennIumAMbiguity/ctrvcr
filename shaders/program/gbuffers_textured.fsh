@@ -233,18 +233,14 @@ void main()
         #else
             float fog = Fog(isEyeInWater, time8_rf, gl_FogFragCoord);
         #endif
-
-        col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
     #else
-    
         #ifdef DISTANT_HORIZONS
             float fog = Fog(isEyeInWater, 0, linearDepth*2);
         #else
             float fog = Fog(isEyeInWater, 0, gl_FogFragCoord);
         #endif
-
-        col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
     #endif
+    col.rgb = mix(col.rgb, FogCol(), fog);
     
 
 

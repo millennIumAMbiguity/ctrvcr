@@ -5,6 +5,21 @@
 #endif
 uniform float far;
 
+#if defined(DYNAMIC_FOG) && !defined(THE_NETHER) && !defined(THE_END)
+    uniform ivec2 eyeBrightnessSmooth;
+    float eyeBrightnessSmooth_f() {return eyeBrightnessSmooth.y/240f;}
+#else
+    float eyeBrightnessSmooth_f() {return 1;}
+#endif
+
+vec3 FogCol() {
+    #if defined(DYNAMIC_FOG) && !defined(THE_NETHER) && !defined(THE_END)
+        return gl_Fog.color.rgb * eyeBrightnessSmooth_f();
+    #else
+        return gl_Fog.color.rgb;
+    #endif
+}
+
 float OldFog(float isEyeInWater) {
     float fog_d = max(gl_Fog.density, 0.05 * FOG_MULT_F);
     float fog_s = max(gl_Fog.scale, 0.005 * FOG_MULT_F);
@@ -43,7 +58,11 @@ float FogNDF(float isEyeInWater, float fog_l) {
     if (isEyeInWater > 0) {
         fog = 1.-exp(-fog_l * fog_d);
     }
-    if (far - fog_start <= 0) return 0;
+    #if defined(DYNAMIC_FOG) && !defined(THE_NETHER) && !defined(THE_END)
+        if (far - fog_start <= 0) return 1-eyeBrightnessSmooth_f();
+    #else
+        if (far - fog_start <= 0) return 0;
+    #endif
     else
     {
         fog = clamp((fog_l - fog_start) / (far - fog_start) + fog_d*(1-1/fog_l), 0., 1.);
@@ -59,7 +78,7 @@ float Fog(float isEyeInWater, float time8_rf, float fog_l) {
     //    return FogNDF(isEyeInWater);
     //#endif
 
-    float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F) + 0.0000001;
+    float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F);
     #ifdef DISTANT_HORIZONS
         float f = dhFarPlane;
 

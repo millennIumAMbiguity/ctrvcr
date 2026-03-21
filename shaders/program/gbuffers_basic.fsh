@@ -9,6 +9,9 @@ uniform int isEyeInWater;
 //Vertex color.
 varying vec4 color;
 
+// 0-1 sun bitghness.
+uniform float sunAngle;
+
 void main()
 {
 
@@ -19,7 +22,8 @@ void main()
     vec4 col = color;
 
     #if defined(SKYBASIC)
-    if (col.r < 0.5)
+    // dont fog stars
+    if (col.r < 0.49999 || col.r > 0.5 || sunAngle < 0.5)
     #endif
     // Apply the fog.
     {
@@ -28,12 +32,11 @@ void main()
         #else
             float fog = FogNDF(isEyeInWater, gl_FogFragCoord);
         #endif
-        col.rgb = mix(col.rgb, gl_Fog.color.rgb, fog);
+        col.rgb = mix(col.rgb, FogCol(), fog);
     }
 
     // Apply blindness
-    col.rgb *= vec3(1.-blindness);
-
+    col.rgb *= (1.-blindness);
     //Output the result.
     gl_FragData[0] = col;
 }

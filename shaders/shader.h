@@ -48,6 +48,7 @@
 //#define VANILLA_LIGHT
 //#define DISCARD_SKY
 #define FOG_MULT 20 //[0 10 20 30 40 50 60 70 80 90 100 110 125 150 200 250 350 500]
+#define DYNAMIC_FOG
 #define HAND_DYNAMIC_LIGHTING
 
 #define VERT_ROUNDING_SIZE -1 //[1 2 4 8 16 32 64 128 256 -1]
@@ -72,6 +73,8 @@ const float PI2 = 6.283185307179586476925286766559;
 #ifdef BNW_PRE_TINT
 #endif
 #ifdef DISCARD_SKY
+#endif
+#ifdef DYNAMIC_FOG
 #endif
 
 // Force settings to be disabled for whne not using Iris
