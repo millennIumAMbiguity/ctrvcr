@@ -1,3 +1,7 @@
+## 1.4.2
+### Fixes
+- Fixed bug for distant horizons
+
 ## 1.4.1
 ### Changes
 - Updated fog
