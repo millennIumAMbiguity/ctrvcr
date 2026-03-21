@@ -43,6 +43,7 @@ float FogNDF(float isEyeInWater, float fog_l) {
     if (isEyeInWater > 0) {
         fog = 1.-exp(-fog_l * fog_d);
     }
+    if (far - fog_start <= 0) return 0;
     else
     {
         fog = clamp((fog_l - fog_start) / (far - fog_start) + fog_d*(1-1/fog_l), 0., 1.);
@@ -79,6 +80,7 @@ float Fog(float isEyeInWater, float time8_rf, float fog_l) {
     if (isEyeInWater > 0) {
         fog = 1.-exp(-fog_l * fog_d);
     }
+    if (far - fog_start <= 0) return 0;
     else
     {
         fog = clamp((fog_l - fog_start) / (f - fog_start) + fog_d*(1-1/fog_l), 0., 1.);
