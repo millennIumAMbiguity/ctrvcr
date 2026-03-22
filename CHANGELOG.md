@@ -3,6 +3,8 @@
 - Added dynamic fog.
 ### Changes
 - AIWS no longer affects hand, snow, and rain.
+- Tweaked AIWS.
+- Tweaked lighting.
 - Updated profiles.
 ### Fixes
 - Fixed small issues with fog.
