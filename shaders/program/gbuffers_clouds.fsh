@@ -27,7 +27,7 @@ void main()
 
     // Apply the fog.
     #ifdef DISTANT_HORIZONS
-        float fog = FogNDF(isEyeInWater, gl_FogFragCoord / 10);
+        float fog = FogNDF(isEyeInWater, gl_FogFragCoord *100);
     #else
         float fog = FogNDF(isEyeInWater, gl_FogFragCoord / 10);
     #endif

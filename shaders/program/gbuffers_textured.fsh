@@ -118,13 +118,9 @@ void main()
     //Combine lightmap with blindness.
     vec3 light = CalculateLightStrengthAndColor(sunAngle);
 
-#if defined(DISTANT_HORIZONS) || defined(HAND_DYNAMIC_LIGHTING)
-    float linearDepth = length(worldPos);
-#endif
-
 #ifdef HAND_DYNAMIC_LIGHTING
     {
-        float handlight = 1.05-clamp((linearDepth)/heldBlockLightValue, 0, 1.05);
+        float handlight = 1.05-clamp((gl_FogFragCoord)/heldBlockLightValue, 0, 1.05);
         handlight *= handlight * handlight; // handlight^4
         vec3 handLightColor = vec3(COLOR_LIGHT_HAND_R_F, COLOR_LIGHT_HAND_G_F, COLOR_LIGHT_HAND_B_F) * handlight;
         light = mix(handLightColor, light + handLightColor/10, light);
@@ -136,7 +132,7 @@ void main()
     float time8_rf = Random_float(coord1 * time8 + worldPos.x + worldPos.y + worldPos.z);
 
     #ifdef DISTANT_HORIZONS
-        DhDitterFog(time8_rf, linearDepth);
+        DhDitterFog(time8_rf, gl_FogFragCoord);
     #endif
 #endif
 
@@ -239,13 +235,13 @@ void main()
     // fog
     #if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
         #ifdef DISTANT_HORIZONS
-            float fog = Fog(isEyeInWater, time8_rf, linearDepth*2);
+            float fog = Fog(isEyeInWater, time8_rf, gl_FogFragCoord*2);
         #else
             float fog = Fog(isEyeInWater, time8_rf, gl_FogFragCoord);
         #endif
     #else
         #ifdef DISTANT_HORIZONS
-            float fog = Fog(isEyeInWater, 0, linearDepth*2);
+            float fog = Fog(isEyeInWater, 0, gl_FogFragCoord*2);
         #else
             float fog = Fog(isEyeInWater, 0, gl_FogFragCoord);
         #endif

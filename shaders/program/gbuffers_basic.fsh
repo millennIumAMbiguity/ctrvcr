@@ -18,6 +18,7 @@ void main()
     #if defined(DISCARD_SKY) && defined(SKYBASIC)
         discard;
     #endif
+    if (gl_Fog.color.r + gl_Fog.color.g + gl_Fog.color.b <= 0) discard;
 
     vec4 col = color;
 

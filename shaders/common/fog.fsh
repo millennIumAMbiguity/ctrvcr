@@ -43,14 +43,14 @@ float OldFogS(float isEyeInWater, float scale) {
 }
 
 float FogNDF(float isEyeInWater, float fog_l) {
+    //return 0;
+    float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F);
     #ifdef DISTANT_HORIZONS
-        float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F);
-        float fog_start = dhFarPlane - fog_l;
-
-        float fog_s = (5 * FOG_MULT_F)/dhFarPlane;
-        fog_start = far/2.;
+        float f = far;
+        float fog_s = (5 * FOG_MULT_F)/f;
+        float fog_start = f/2.;
     #else
-        float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F) + 0.0000001;
+        float f = far;
         float fog_start = gl_Fog.start/5 + 10 * FOG_MULT_F;
     #endif
 
@@ -59,13 +59,13 @@ float FogNDF(float isEyeInWater, float fog_l) {
         fog = 1.-exp(-fog_l * fog_d);
     }
     #if defined(DYNAMIC_FOG) && !defined(THE_NETHER) && !defined(THE_END)
-        if (far - fog_start <= 0) return 1-eyeBrightnessSmooth_f();
+        if (f - fog_start <= 0) return 1-eyeBrightnessSmooth_f();
     #else
-        if (far - fog_start <= 0) return 0;
+        if (f - fog_start <= 0) return 0;
     #endif
     else
     {
-        fog = clamp((fog_l - fog_start) / (far - fog_start) + fog_d*(1-1/fog_l), 0., 1.);
+        fog = clamp((fog_l - fog_start) / (f - fog_start) + fog_d*(1-1/fog_l), 0., 1.);
     }
 
     //if (fog >= 1) discard;
@@ -99,7 +99,7 @@ float Fog(float isEyeInWater, float time8_rf, float fog_l) {
     if (isEyeInWater > 0) {
         fog = 1.-exp(-fog_l * fog_d);
     }
-    if (far - fog_start <= 0) return 0;
+    if (f - fog_start <= 0) return 0;
     else
     {
         fog = clamp((fog_l - fog_start) / (f - fog_start) + fog_d*(1-1/fog_l), 0., 1.);
