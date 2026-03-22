@@ -1,10 +1,19 @@
+## 1.4.3
+### Additions
+- Added dynamic fog.
+### Changes
+- AIWS no longer affects hand, snow, and rain.
+- Updated profiles.
+### Fixes
+- Fixed small issues with fog.
+
 ## 1.4.2
 ### Fixes
 - Fixed bug for distant horizons
 
 ## 1.4.1
 ### Changes
-- Updated fog
+- Updated fog.
 ### Fixes
 - Fixed mobs not affected by fog in some cases.
 - Fixed sky being black under water.
