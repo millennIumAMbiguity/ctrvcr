@@ -233,20 +233,22 @@ void main()
     col.rgb = mix(col.rgb,entityColor.rgb,entityColor.a);
 
     // fog
-    #if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
-        #ifdef DISTANT_HORIZONS
-            float fog = Fog(isEyeInWater, time8_rf, gl_FogFragCoord*2);
+    #if !defined(HAND)
+        #if LIGHTMAP_DITERING != -1 || defined(DITTER_FOG)
+            #ifdef DISTANT_HORIZONS
+                float fog = Fog(isEyeInWater, time8_rf, gl_FogFragCoord*2);
+            #else
+                float fog = Fog(isEyeInWater, time8_rf, gl_FogFragCoord);
+            #endif
         #else
-            float fog = Fog(isEyeInWater, time8_rf, gl_FogFragCoord);
+            #ifdef DISTANT_HORIZONS
+                float fog = Fog(isEyeInWater, 0, gl_FogFragCoord*2);
+            #else
+                float fog = Fog(isEyeInWater, 0, gl_FogFragCoord);
+            #endif
         #endif
-    #else
-        #ifdef DISTANT_HORIZONS
-            float fog = Fog(isEyeInWater, 0, gl_FogFragCoord*2);
-        #else
-            float fog = Fog(isEyeInWater, 0, gl_FogFragCoord);
-        #endif
+        col.rgb = mix(col.rgb, FogCol(), fog);
     #endif
-    col.rgb = mix(col.rgb, FogCol(), fog);
     
 
 
