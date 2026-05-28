@@ -21,7 +21,7 @@ void main()
     #endif
 
     //Visibility amount.
-    vec3 light = vec3(1.-blindness);
+    vec3 light = vec3(1.0-blindness);
     //Sample texture times Visibility.
     vec4 col = color * vec4(light,1) * texture2D(texture,coord0);
 

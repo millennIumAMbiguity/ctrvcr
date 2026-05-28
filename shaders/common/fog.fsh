@@ -7,9 +7,9 @@ uniform float far;
 
 #if defined(DYNAMIC_FOG) && !defined(THE_NETHER) && !defined(THE_END)
     uniform ivec2 eyeBrightnessSmooth;
-    float eyeBrightnessSmooth_f() {return eyeBrightnessSmooth.y/240.;}
+    float eyeBrightnessSmooth_f() {return eyeBrightnessSmooth.y/240.0;}
 #else
-    float eyeBrightnessSmooth_f() {return 1.;}
+    float eyeBrightnessSmooth_f() {return 1.0;}
 #endif
 
 vec3 FogCol() {
@@ -25,8 +25,8 @@ float OldFog(float isEyeInWater) {
     float fog_s = max(gl_Fog.scale, 0.005 * FOG_MULT_F);
 
     //Calculate fog intensity in or out of water.
-    float fog = (isEyeInWater > 0.0) ? 1.-exp(-gl_FogFragCoord * fog_d):
-    clamp((gl_FogFragCoord-gl_Fog.start) * fog_s, 0., 1.);
+    float fog = (isEyeInWater > 0.0) ? 1.0-exp(-gl_FogFragCoord * fog_d):
+    clamp((gl_FogFragCoord-gl_Fog.start) * fog_s, 0.0, 1.0);
 
     return fog;
 }
@@ -36,8 +36,8 @@ float OldFogS(float isEyeInWater, float scale) {
     float fog_s = max(gl_Fog.scale, 0.005 * scale);
 
     //Calculate fog intensity in or out of water.
-    float fog = (isEyeInWater > 0.0) ? 1.-exp(-gl_FogFragCoord * fog_d):
-    clamp((gl_FogFragCoord-gl_Fog.start) * fog_s, 0., 1.);
+    float fog = (isEyeInWater > 0.0) ? 1.0-exp(-gl_FogFragCoord * fog_d):
+    clamp((gl_FogFragCoord-gl_Fog.start) * fog_s, 0.0, 1.0);
 
     return fog;
 }
@@ -48,24 +48,24 @@ float FogNDF(float isEyeInWater, float fog_l) {
     #ifdef DISTANT_HORIZONS
         float f = far;
         float fog_s = (5 * FOG_MULT_F)/f;
-        float fog_start = f/2.;
+        float fog_start = f/2.0;
     #else
         float f = far;
-        float fog_start = gl_Fog.start/5. + 10. * FOG_MULT_F;
+        float fog_start = gl_Fog.start/5.0 + 10.0 * FOG_MULT_F;
     #endif
 
     float fog = 0.0;
     if (isEyeInWater > 0.0) {
-        fog = 1.-exp(-fog_l * fog_d);
+        fog = 1.0-exp(-fog_l * fog_d);
     }
     #if defined(DYNAMIC_FOG) && !defined(THE_NETHER) && !defined(THE_END)
-        if (f - fog_start <= 0.) return 1.-eyeBrightnessSmooth_f();
+        if (f - fog_start <= 0.0) return 1.0-eyeBrightnessSmooth_f();
     #else
-        if (f - fog_start <= 0.) return 0.;
+        if (f - fog_start <= 0.0) return 0.0;
     #endif
     else
     {
-        fog = clamp((fog_l - fog_start) / (f - fog_start) + fog_d*(1.-1./fog_l), 0., 1.);
+        fog = clamp((fog_l - fog_start) / (f - fog_start) + fog_d*(1.0-1.0/fog_l), 0.0, 1.0);
     }
 
     //if (fog >= 1) discard;
@@ -94,15 +94,15 @@ float Fog(float isEyeInWater, float time8_rf, float fog_l) {
         float fog_start = gl_Fog.start/5 + 10 * FOG_MULT_F;
     #endif
 
-    float fog = 0.;
+    float fog = 0.0;
 
-    if (isEyeInWater > 0.) {
-        fog = 1.-exp(-fog_l * fog_d);
+    if (isEyeInWater > 0.0) {
+        fog = 1.0-exp(-fog_l * fog_d);
     }
-    if (f - fog_start <= 0.) return 0.;
+    if (f - fog_start <= 0.0) return 0.0;
     else
     {
-        fog = clamp((fog_l - fog_start) / (f - fog_start) + fog_d*(1.-1./fog_l), 0., 1.);
+        fog = clamp((fog_l - fog_start) / (f - fog_start) + fog_d*(1.0-1.0/fog_l), 0.0, 1.0);
     }
 
     #ifdef DITTER_FOG
@@ -124,7 +124,7 @@ void DhDitterFog(float time8_rf, float linearDepth){
     #ifdef DISTANT_HORIZONS
         #ifdef DITTER_FOG
             #ifdef DH
-                if (time8_rf >= (linearDepth - (far - dhNearPlane))/(far*0.1) + 2.) {
+                if (time8_rf >= (linearDepth - (far - dhNearPlane))/(far*0.1) + 2.0) {
                     discard;
                 }
             #else

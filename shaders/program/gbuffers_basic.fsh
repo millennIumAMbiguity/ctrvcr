@@ -37,7 +37,7 @@ void main()
     }
 
     // Apply blindness
-    col.rgb *= (1.-blindness);
+    col.rgb *= (1.0-blindness);
     //Output the result.
     gl_FragData[0] = col;
 }

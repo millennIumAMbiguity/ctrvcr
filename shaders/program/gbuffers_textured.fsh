@@ -93,7 +93,7 @@ vec3 CalculateLightStrengthAndColor(float x)
         vec3 monLight = coord1.y * MOONLIGHT_STRENGHT_F * vec3(COLOR_LIGHT_SKY_NIGHT_R_F, COLOR_LIGHT_SKY_NIGHT_G_F, COLOR_LIGHT_SKY_NIGHT_B_F);
         sunLight = max(sunLight, monLight * (1-sunLightStrength));
 #endif
-    vec3 skyLight = max(sunLight, sunsetLight) * (1. - rainStrength / 2.);
+    vec3 skyLight = max(sunLight, sunsetLight) * (1.0 - rainStrength / 2.0);
 
     vec3 blockLight = coord1.x * vec3(COLOR_LIGHT_BLOCK_R_F, COLOR_LIGHT_BLOCK_G_F, COLOR_LIGHT_BLOCK_B_F);
 
@@ -138,11 +138,11 @@ void main()
 
 #if LIGHTMAP_DITERING != -1
     if (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID) {
-        light = (1. - blindness) * max(light + (LIGHTMAP_DITERING_F * time8_rf / 16.0), 0.0);
+        light = (1.0 - blindness) * max(light + (LIGHTMAP_DITERING_F * time8_rf / 16.0), 0.0);
     } else
 #endif
     {
-        light *= 1. - blindness;
+        light *= 1.0 - blindness;
     }
 
     // Apply darkness and lighting strength.

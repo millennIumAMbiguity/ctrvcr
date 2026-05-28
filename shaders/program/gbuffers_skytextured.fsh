@@ -14,7 +14,7 @@ varying vec2 coord0;
 void main()
 {
     //Visibility amount.
-    vec3 light = vec3(1.-blindness);
+    vec3 light = vec3(1.0-blindness);
     //Sample texture times Visibility.
     vec4 col = vec4(light,1) * texture2D(texture,coord0);
 
