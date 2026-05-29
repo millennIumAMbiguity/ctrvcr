@@ -18,7 +18,7 @@ varying vec2 texcoord_vs;
 	{
 		ivec2 ip = ivec2(mod(p * vec2(viewWidth, viewHeight) / RENDER_PIXEL_SIZE, 2.0));
 
-		// 2x2 Bayer matrix values (0.0.3), normalized to 0.0.1
+		// 2x2 Bayer matrix values (0..3), normalized to 0..1
 		int index = ip.x + ip.y * 2;
 		float bayer[4] = float[4](
 			0.0 / 4.0,
@@ -35,8 +35,8 @@ varying vec2 texcoord_vs;
 		// Convert screen coordinates to 4x4 grid
 		ivec2 ip = ivec2(mod(p * vec2(viewWidth, viewHeight) / RENDER_PIXEL_SIZE, 4.0));
 
-		// 4x4 Bayer matrix (normalized 0.0.1)
-		// This is the classic ordered dithering pattern, slightly remapped to 0.0.1
+		// 4x4 Bayer matrix (normalized 0..1)
+		// This is the classic ordered dithering pattern, slightly remapped to 0..1
 		float bayer[16] = float[16](
 			0.0 / 16.0,  8.0 / 16.0,  2.0 / 16.0, 10.0 / 16.0,
 		12.0 / 16.0,  4.0 / 16.0, 14.0 / 16.0,  6.0 / 16.0,
