@@ -1,3 +1,8 @@
+## 1.4.5
+- Fixed part of sky not affected by adaptive fog.
+- Fixed fongs on clouds
+- Add fom muliplier that can be used to disable fog.
+
 ## 1.4.4
 ### Fixes
 - Fixed compilation issue for older GLSL compilers. [#6](https://github.com/millennIumAMbiguity/ctrvcr/pull/6)

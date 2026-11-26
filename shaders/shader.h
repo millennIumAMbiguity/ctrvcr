@@ -48,6 +48,7 @@
 //#define VANILLA_LIGHT
 //#define DISCARD_SKY
 #define FOG_MULT 20 //[0 10 20 30 40 50 60 70 80 90 100 110 125 150 200 250 350 500]
+#define FOG_SCALE 100 //[0 10 20 30 40 50 60 70 80 90 100 110 125 150 200 250 350 500]
 #define DYNAMIC_FOG
 #define HAND_DYNAMIC_LIGHTING
 
@@ -196,3 +197,4 @@ const float COLOR_LIGHT_HAND_B_F = float(COLOR_LIGHT_HAND_B) / 100.0;
 const float AIWS_SPEED_F = float(AIWS_SPEED) / 10.0;
 const float AIWS_INTENSITY_F = float(AIWS_INTENSITY) / 100.0;
 const float FOG_MULT_F = float(FOG_MULT) / 100.0;
+const float FOG_SCALE_F = float(FOG_SCALE) / 100.0;

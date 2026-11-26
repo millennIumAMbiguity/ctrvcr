@@ -28,7 +28,7 @@ float OldFog(float isEyeInWater) {
     float fog = (isEyeInWater > 0.0) ? 1.0-exp(-gl_FogFragCoord * fog_d):
     clamp((gl_FogFragCoord-gl_Fog.start) * fog_s, 0.0, 1.0);
 
-    return fog;
+    return fog * FOG_SCALE_F;
 }
 
 float OldFogS(float isEyeInWater, float scale) {
@@ -39,11 +39,11 @@ float OldFogS(float isEyeInWater, float scale) {
     float fog = (isEyeInWater > 0.0) ? 1.0-exp(-gl_FogFragCoord * fog_d):
     clamp((gl_FogFragCoord-gl_Fog.start) * fog_s, 0.0, 1.0);
 
-    return fog;
+    return fog * FOG_SCALE_F;
 }
 
+// fog used for things like sky
 float FogNDF(float isEyeInWater, float fog_l) {
-    //return 0;
     float fog_d = max(gl_Fog.density, 0.5 * FOG_MULT_F);
     #ifdef DISTANT_HORIZONS
         float f = far;
@@ -73,6 +73,11 @@ float FogNDF(float isEyeInWater, float fog_l) {
 }
 
 float Fog(float isEyeInWater, float time8_rf, float fog_l) {
+
+    #if FOG_SCALE == 0
+        return 0;
+    #endif
+
     //#ifdef DITTER_FOG
     //#else
     //    return FogNDF(isEyeInWater);
@@ -106,7 +111,7 @@ float Fog(float isEyeInWater, float time8_rf, float fog_l) {
     }
 
     #ifdef DITTER_FOG
-        if (time8_rf < fog * 1.5 - 0.5) {
+        if (time8_rf < (fog * 1.5 - 0.5) * FOG_SCALE_F) {
             //gl_FragDepth = 0;
             
             //return 1;
@@ -117,7 +122,7 @@ float Fog(float isEyeInWater, float time8_rf, float fog_l) {
     #endif
 
     //if (fog >= 1) discard;
-    return fog;
+    return fog * FOG_SCALE_F;
 }
 
 void DhDitterFog(float time8_rf, float linearDepth){

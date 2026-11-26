@@ -15,10 +15,21 @@ uniform float sunAngle;
 void main()
 {
 
+
     #if defined(DISCARD_SKY) && defined(SKYBASIC)
         discard;
     #endif
-    if (gl_Fog.color.r + gl_Fog.color.g + gl_Fog.color.b <= 0) discard;
+
+    if (gl_Fog.color.r + gl_Fog.color.g + gl_Fog.color.b <= 0)
+    {
+        #if !defined(DYNAMIC_FOG)
+            discard; 
+        #else
+            float fog = 1.0-eyeBrightnessSmooth_f();
+            gl_FragData[0] = vec4(mix(color.rgb, FogCol(), fog), 1);
+            return;
+        #endif
+    }
 
     vec4 col = color;
 
